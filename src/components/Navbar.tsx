@@ -1,6 +1,52 @@
 import React from "react";
 
-export default function Navbar() {
+export default function Navbar(darkMode: any) {
+  const [darkModeState, setDarkMode] = React.useState(darkMode);
+
+  const initialMode = () => {
+    console.log("hello");
+    if (window.localStorage.getItem("color-theme") === "dark") {
+      document.documentElement.classList.add("dark");
+      setDarkMode(true);
+    } else {
+      document.documentElement.classList.remove("dark");
+      setDarkMode(false);
+    }
+  };
+
+  React.useEffect(() => initialMode, []);
+
+  const changeMode = () => {
+    // if set via local storage previously
+    if (localStorage.getItem("color-theme")) {
+      if (localStorage.getItem("color-theme") === "light") {
+        document.documentElement.classList.add("dark");
+        localStorage.setItem("color-theme", "dark");
+        setDarkMode(true);
+      } else {
+        document.documentElement.classList.remove("dark");
+        localStorage.setItem("color-theme", "light");
+        setDarkMode(false);
+      }
+
+      // if NOT set via local storage previously
+    } else {
+      if (document.documentElement.classList.contains("dark")) {
+        document.documentElement.classList.remove("dark");
+        localStorage.setItem("color-theme", "light");
+        setDarkMode(false);
+      } else {
+        document.documentElement.classList.add("dark");
+        localStorage.setItem("color-theme", "dark");
+        setDarkMode(true);
+      }
+    }
+  };
+
+  const test = () => {
+    console.log("test");
+  };
+
   return (
     <header className="flex justify-between flex-row  mb-4">
       <div className="flex flex-col">
@@ -21,7 +67,16 @@ export default function Navbar() {
         <a href="https://github.com/caesar-chin" target="_blank">
           Github
         </a>
-        <a>Light Mode</a>
+
+        {darkModeState ? (
+          <a className="cursor-pointer" onClick={changeMode}>
+            Dark Mode
+          </a>
+        ) : (
+          <a className="cursor-pointer" onClick={changeMode}>
+            Light Mode
+          </a>
+        )}
       </div>
     </header>
   );

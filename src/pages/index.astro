@@ -5,14 +5,14 @@ import Home from "../components/Home";
 import Projects from "../components/Projects";
 import Contact from "../components/Contact";
 
-
+let darkMode = localStorage.getItem("color-theme") === "dark" ? true : false;
 ---
 
-<div class="bg-white dark:bg-darkish-cyan">
+<div class="bg-white dark:bg-darkish-cyan text-black dark:text-white">
   <Layout title="Caesar Chin">
     <div class="flex items-center flex-col container mx-auto px-20">
       <div id="home" class="w-full">
-        <Navbar />
+        <Navbar darkMode={darkMode} client:visible />
         <Home />
       </div>
       <div id="projects" class="w-full h-screen">

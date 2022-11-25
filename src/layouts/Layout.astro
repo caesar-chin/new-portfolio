@@ -11,6 +11,20 @@ const { title } = Astro.props;
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <script>
+      // It's best to inline this in `head` to avoid FOUC (flash of unstyled content) when changing pages or themes
+      if (
+        localStorage.getItem("color-theme") === "dark" ||
+        (!("color-theme" in localStorage) &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        document.documentElement.classList.add("dark");
+        localStorage.setItem('color-theme', 'dark');
+      } else {
+        document.documentElement.classList.remove("dark");
+        localStorage.setItem('color-theme', 'light');
+      }
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -35,7 +49,7 @@ const { title } = Astro.props;
       html {
         font-family: "Faustina", sans-serif;
         font-size: var(--font-size-base);
-        color: var(--color-text);
+        /* color: var(--color-text); */
         /* background-color: var(--color-bg); */
       }
 
