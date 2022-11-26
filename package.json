@@ -11,9 +11,12 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/image": "^0.11.6",
     "@astrojs/react": "^1.2.2",
     "@astrojs/tailwind": "^2.1.2",
     "@fontsource/faustina": "^4.5.10",
+    "@fontsource/merriweather-sans": "^4.5.10",
+    "@fontsource/murecho": "^4.5.11",
     "@fontsource/ubuntu": "^4.5.11",
     "@fullpage/react-fullpage": "^0.1.31",
     "@types/react": "^18.0.25",
@@ -23,6 +26,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-page-scroller": "^2.3.1",
+    "react-slideshow-image": "^4.0.5",
+    "sharp": ">=0.31.0",
     "tailwindcss": "^3.0.24"
   }
 }

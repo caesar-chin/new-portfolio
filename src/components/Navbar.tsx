@@ -56,24 +56,69 @@ export default function Navbar(darkMode: any) {
         >
           Caesar Chin
         </a>
-        <div className="">full-stack developer & devops</div>
+        <div className="">
+          full-stack developer &{" "}
+          <a
+            href="/photography"
+            className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+          >
+            photographer
+          </a>
+        </div>
       </div>
 
       <div className="flex flex-col">
-        <a href="/about">About</a>
-        <a href="#projects">Projects</a>
-        <a href="/photography">Photography</a>
-        <a href="#contact">Contact</a>
-        <a href="https://github.com/caesar-chin" target="_blank">
+        <a
+          href="/about"
+          className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+        >
+          About
+        </a>
+        <a
+          href="#projects"
+          className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+        >
+          Projects
+        </a>
+        <a
+          href="/photography"
+          className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+        >
+          Photography
+        </a>
+        <a
+          href="#contact"
+          className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+        >
+          Contact
+        </a>
+        <a
+          href="https://github.com/caesar-chin"
+          target="_blank"
+          className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+        >
           Github
+        </a>
+        <a
+          href="https://www.linkedin.com/in/caesar-chin/"
+          target="_blank"
+          className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+        >
+          Linkedin
         </a>
 
         {darkModeState ? (
-          <a className="cursor-pointer" onClick={changeMode}>
+          <a
+            className="cursor-pointer hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+            onClick={changeMode}
+          >
             Dark Mode
           </a>
         ) : (
-          <a className="cursor-pointer" onClick={changeMode}>
+          <a
+            className="cursor-pointer hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+            onClick={changeMode}
+          >
             Light Mode
           </a>
         )}
