@@ -7,7 +7,7 @@ export default function Projects() {
   return (
     <div>
       <div className="font-murecho font-extralight opacity-80">Projects</div>
-      <div className="projectCard flex flex-row pt-5 pb-16">
+      <div className="projectCard flex flex-row pt-4 pb-16">
         <div className="w-6/12 pr-4">
           <div className="text-4xl">Hermes</div>
           <div className="my-6 text-xl font-murecho">
