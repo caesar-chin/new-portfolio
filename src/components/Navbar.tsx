@@ -104,7 +104,7 @@ export default function Navbar(darkMode: any) {
           target="_blank"
           className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
         >
-          Linkedin
+          LinkedIn
         </a>
 
         {darkModeState ? (

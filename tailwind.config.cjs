@@ -14,6 +14,11 @@ module.exports = {
       "sea-foam-green": "#A5DEC8",
       white: "#ffffff",
       black: "#000000",
+      red: "rgb(255, 67, 67)",
+      "faded-grey": "#dde8e4",
+    },
+    borderWidth: {
+      half: "0.5px",
     },
     extend: {},
   },
