@@ -15,6 +15,8 @@ module.exports = {
       white: "#ffffff",
       black: "#000000",
       red: "rgb(255, 67, 67)",
+      "actual-red": "#ff0000",
+      "actual-green": "#00ff00",
       "faded-grey": "#dde8e4",
     },
     borderWidth: {

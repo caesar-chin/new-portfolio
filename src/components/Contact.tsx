@@ -1,57 +1,47 @@
 import React from "react";
-// import nodemailer from "nodemailer";
 
 export default function Contact() {
   const [success, setSuccess] = React.useState(false);
   const [button, setButton] = React.useState(false);
-  const [email, setEmail] = React.useState("");
-  const [name, setName] = React.useState("");
-  const [message, setMessage] = React.useState("");
 
   function test() {
     alert("test");
   }
 
-  // const sendEmail = () => {
-  //   setButton(true);
-  //   var transporter = nodemailer.createTransport({
-  //     service: "gmail",
-  //     auth: {
-  //       user: import.meta.env.EMAIL_USER,
-  //       pass: import.meta.env.EMAIL_PASS,
-  //     },
-  //   });
+  const sendEmail = async (e: any) => {
+    e.preventDefault();
+    setButton(true);
 
-  //   let mailOptions = {
-  //     from: email,
-  //     to: "caesarc.1628@gmail.com",
-  //     subject: `Message from ${name} via caesarchin.com`,
-  //     html: message,
-  //   };
+    console.log(
+      JSON.stringify({
+        name: e.target.name.value,
+        email: e.target.email.value,
+        message: e.target.message.value,
+      })
+    );
 
-  //   transporter.sendMail(mailOptions, (error: any, info: any) => {
-  //     if (error) {
-  //       console.log(error);
-  //       setSuccess(false);
-  //     } else {
-  //       console.log("Email sent: " + info.response);
-  //       setSuccess(true);
-  //     }
-  //   });
-  // };
-
-  function changeEmail(e: any) {
-    setEmail(e.target.value);
-  }
-
-  function changeName(e: any) {
-    setName(e.target.value);
-  }
-
-  function changeMessage(e: any) {
-    console.log(e.target.value);
-    setMessage(e.target.value);
-  }
+    await fetch(`${import.meta.env.PUBLIC_API_URL}/send_email`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: e.target.name.value,
+        email: e.target.email.value,
+        message: e.target.message.value,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success === true) {
+          setSuccess(true);
+        } else {
+          setSuccess(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setSuccess(false);
+      });
+  };
 
   return (
     <div>
@@ -59,7 +49,7 @@ export default function Contact() {
         Contact me if you have any questions or want to collaborate on a
         project!
       </div>
-      <form className="flex flex-col">
+      <form className="flex flex-col" onSubmit={sendEmail}>
         <label className="mt-4 mb-2 flex flex-row font-murecho">
           Your Name<p className="text-red">*</p>
         </label>
@@ -68,8 +58,6 @@ export default function Contact() {
           type="text"
           name="name"
           required
-          value={name}
-          onChange={changeName}
           placeholder="John Doe"
         />
         <label className="mt-4 mb-2 flex flex-row font-murecho">
@@ -77,11 +65,9 @@ export default function Contact() {
         </label>
         <input
           className="dark:bg-darkish-cyan bg-white text:black dark:text-white text-3xl border-b-half border-faded-grey mb-4"
-          type="text"
+          type="email"
           name="email"
           required
-          value={email}
-          onChange={changeEmail}
           placeholder="johndoe@gmail.com"
         />
         <label className="mt-4 mb-2  flex flex-row font-murecho">
@@ -91,26 +77,28 @@ export default function Contact() {
           className="dark:bg-darkish-cyan bg-white text:black dark:text-white text-3xl border-b-half border-faded-grey mb-4"
           name="message"
           required
-          value={message}
-          onChange={changeMessage}
           placeholder="Hi! I'm interested in working with you on a project."
         />
-      </form>
-      <button
-        className="mt-4 text-2xl w-28 text-center rounded-full leading-10 border-[2px] border-sea-foam-green hover:bg-sea-foam-green dark:border-dark-grayish-red dark:hover:bg-dark-grayish-red"
-        onClick={test}
-      >
-        Send
-      </button>
-      {button ? (
-        success && button ? (
-          <div className="mt-4 text-xl">Email has been sent!</div>
+        <button
+          className="mt-4 text-2xl w-28 text-center rounded-full leading-10 border-[2px] border-sea-foam-green hover:bg-sea-foam-green dark:border-dark-grayish-red dark:hover:bg-dark-grayish-red"
+          type="submit"
+        >
+          Send
+        </button>
+        {button ? (
+          success && button ? (
+            <div className="mt-4 text-xl text-actual-green">
+              Email has been sent!
+            </div>
+          ) : (
+            <div className="mt-4 text-xl text-actual-red">
+              There has been an error
+            </div>
+          )
         ) : (
-          <div className="mt-4 text-xl">There has been an error</div>
-        )
-      ) : (
-        ""
-      )}
+          ""
+        )}
+      </form>
     </div>
   );
 }
