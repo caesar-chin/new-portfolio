@@ -15,7 +15,7 @@ let darkMode = localStorage.getItem("color-theme") === "dark" ? true : false;
       <div class="flex items-center flex-col mx-12 pt-2">
         <div id="home" class="w-full">
           <Navbar darkMode={darkMode} client:only="react" />
-          <Home />
+          <Home client:only="react"/>
         </div>
         <div id="projects" class="w-full">
           <Projects />

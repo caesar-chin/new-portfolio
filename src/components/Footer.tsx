@@ -27,12 +27,12 @@ export default function Footer() {
       </div>
 
       <div className="flex flex-col">
-        <a
+        {/* <a
           href="/about"
           className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
         >
           About
-        </a>
+        </a> */}
         <a
           href="#projects"
           className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
