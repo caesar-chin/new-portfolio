@@ -4,7 +4,7 @@ export default function Navbar(darkMode: any) {
   const [darkModeState, setDarkMode] = React.useState(darkMode);
 
   const initialMode = () => {
-    console.log("hello");
+
     if (window.localStorage.getItem("color-theme") === "dark") {
       document.documentElement.classList.add("dark");
       setDarkMode(true);
@@ -41,10 +41,6 @@ export default function Navbar(darkMode: any) {
         setDarkMode(true);
       }
     }
-  };
-
-  const test = () => {
-    console.log("test");
   };
 
   return (

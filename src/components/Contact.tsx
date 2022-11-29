@@ -10,15 +10,6 @@ export default function Contact() {
 
   const sendEmail = async (e: any) => {
     e.preventDefault();
-    setButton(true);
-
-    console.log(
-      JSON.stringify({
-        name: e.target.name.value,
-        email: e.target.email.value,
-        message: e.target.message.value,
-      })
-    );
 
     await fetch(`${import.meta.env.PUBLIC_API_URL}/send_email`, {
       method: "POST",
@@ -32,13 +23,15 @@ export default function Contact() {
       .then((res) => res.json())
       .then((res) => {
         if (res.success === true) {
+          setButton(true);
           setSuccess(true);
         } else {
+          setButton(true);
           setSuccess(false);
         }
       })
       .catch((err) => {
-        console.log(err);
+        setButton(true);
         setSuccess(false);
       });
   };
