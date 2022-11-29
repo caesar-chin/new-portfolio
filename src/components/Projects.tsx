@@ -1,5 +1,5 @@
 import React from "react";
-import Hermes from "../assets/hermes.png";
+import Hermes from "../assets/Hermes.png";
 import Myntfinance from "../assets/original_myntfinance.png";
 import ReactColors from "../assets/ReactColors.png";
 
