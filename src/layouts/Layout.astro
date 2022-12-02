@@ -1,9 +1,11 @@
 ---
-import * as dotenv from 'dotenv' 
-dotenv.config()
+import * as dotenv from "dotenv";
+dotenv.config();
+
+import { SEO } from "astro-seo";
 
 import "@fontsource/faustina";
-import "@fontsource/murecho"
+import "@fontsource/murecho";
 
 export interface Props {
   title: string;
@@ -15,6 +17,10 @@ const { title } = Astro.props;
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <SEO
+      title="Caesar Chin"
+      description="Full-stack developer & photographer"
+    />
     <script>
       // It's best to inline this in `head` to avoid FOUC (flash of unstyled content) when changing pages or themes
       if (
@@ -32,7 +38,7 @@ const { title } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    
+
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>

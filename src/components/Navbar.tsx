@@ -4,7 +4,6 @@ export default function Navbar(darkMode: any) {
   const [darkModeState, setDarkMode] = React.useState(darkMode);
 
   const initialMode = () => {
-
     if (window.localStorage.getItem("color-theme") === "dark") {
       document.documentElement.classList.add("dark");
       setDarkMode(true);
