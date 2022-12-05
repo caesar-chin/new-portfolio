@@ -43,7 +43,7 @@ export default function Navbar(darkMode: any) {
   };
 
   return (
-    <header className="flex justify-between flex-row  mb-4">
+    <header className="flex justify-between flex-row mb-4">
       <div className="flex flex-col">
         <a
           href="/"
@@ -52,7 +52,13 @@ export default function Navbar(darkMode: any) {
           Caesar Chin
         </a>
         <div className="">
-          full-stack developer &{" "}
+          <a
+            href="/"
+            className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+          >
+            full-stack developer
+          </a>{" "}
+          &{" "}
           <a
             href="/photography"
             className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"

@@ -1,16 +1,16 @@
 import React from "react";
-import cherryblossom from "../assets/cherryblossom.png";
-import cherryblossomtwopeople from "../assets/cherryblossomtwopeople.png";
-import ferriswheel from "../assets/ferriswheel.png";
-import onetwofive from "../assets/onetwofive.png";
-import penn from "../assets/penn.png";
-import seattle from "../assets/seattle.png";
-import umbrellas from "../assets/umbrellas.png";
-import washingtonuniversity from "../assets/washingtonuniversity.png";
+import cherryblossom from "../../assets/cherryblossom.png";
+import cherryblossomtwopeople from "../../assets/cherryblossomtwopeople.png";
+import ferriswheel from "../../assets/ferriswheel.png";
+import onetwofive from "../../assets/onetwofive.png";
+import penn from "../../assets/penn.png";
+import seattle from "../../assets/seattle.png";
+import umbrellas from "../../assets/umbrellas.png";
+import washingtonuniversity from "../../assets/washingtonuniversity.png";
 import { Fade } from "react-slideshow-image";
 
 import "react-slideshow-image/dist/styles.css";
-import "../styles/images.css";
+import "../../styles/images.css";
 
 export default function Home() {
   const imagesArray = [
