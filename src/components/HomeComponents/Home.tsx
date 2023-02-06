@@ -64,8 +64,11 @@ export default function Home() {
       <div className="mt-12 mb-52">
         <Fade arrows={false} duration={3000} transitionDuration={1500}>
           {imagesArray.map((image) => (
-            <div className="flex flex-row justify-center each-fade" key={image.id}>
-              <img className="image-clip"src={image.image} alt={image.alt} />
+            <div
+              className="flex flex-row justify-center each-fade"
+              key={image.id}
+            >
+              <img className="image-clip" src={image.image} alt={image.alt} />
             </div>
           ))}
         </Fade>

@@ -22,7 +22,12 @@ module.exports = {
     borderWidth: {
       half: "0.5px",
     },
-    extend: {},
+    extend: {
+
+    },
+  },
+  variants: {
+    fill: ["hover", "focus"], // this line does the trick
   },
   plugins: [],
 };

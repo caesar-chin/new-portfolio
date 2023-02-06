@@ -13,7 +13,7 @@ export default function Navbar(darkMode: any) {
     }
   };
 
-  React.useEffect(() => initialMode, []);
+  React.useEffect(() => initialMode(), []);
 
   const changeMode = () => {
     // if set via local storage previously
@@ -43,7 +43,7 @@ export default function Navbar(darkMode: any) {
   };
 
   return (
-    <header className="flex justify-between flex-row mb-4">
+    <header className="flex justify-between flex-row mb-4 ">
       <div className="flex flex-col">
         <a
           href="/"
