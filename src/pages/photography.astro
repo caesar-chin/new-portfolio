@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import PhotoNavbar from "../components/PhotographyComponents/PhotoNavbar";
+import PhotoHome from "../components/PhotographyComponents/PhotoHome";
 
 let darkMode = localStorage.getItem("color-theme") === "dark" ? true : false;
 ---
@@ -11,9 +12,10 @@ let darkMode = localStorage.getItem("color-theme") === "dark" ? true : false;
 >
   <Layout title="Caesar Chin Photography">
     <div class="container mx-auto">
-      <div class="flex items-center flex-col mx-12 pt-2">
+      <div class="flex items-center flex-col mx-12 pt-2 min-h-screen">
         <div id="home" class="w-full">
           <PhotoNavbar darkMode={darkMode} client:load />
+          <PhotoHome />
         </div>
       </div>
     </div>

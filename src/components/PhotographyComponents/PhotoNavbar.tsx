@@ -1,7 +1,9 @@
 import React from "react";
 import DarkModeButton from "./DarkModeButton";
+import { Spin as Hamburger } from "hamburger-react";
 
 export default function PhotoNavbar(darkMode: any) {
+  const [isMenuOpen, setMenuOpen] = React.useState(false);
   // const [darkModeState, setDarkMode] = React.useState(darkMode);
 
   // const initialMode = () => {
@@ -46,7 +48,7 @@ export default function PhotoNavbar(darkMode: any) {
   // };
 
   return (
-    <header className="flex justify-between flex-row mb-4">
+    <header className="flex justify-between flex-row mb-8">
       <div className="flex flex-col">
         <a
           href="/photography"
@@ -64,16 +66,52 @@ export default function PhotoNavbar(darkMode: any) {
           &{" "}
           <a
             href="/photography"
-            className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+            className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red dark:text-dark-grayish-red dark text-sea-foam-green"
           >
             photographer
           </a>
         </div>
       </div>
 
-      <div className="flex flex-row items-center">
+      <div className="flex flex-col">
+        {/* <a
+          href="/about"
+          className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+        >
+          About
+        </a> */}
+        <a
+          href="/photography/concert"
+          className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+        >
+          Concert
+        </a>
+        <a
+          href="/photography/streetlandscape"
+          className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+        >
+          Street & Landscape
+        </a>
+        <a
+          href="#contact"
+          className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+        >
+          Contact
+        </a>
+
         <DarkModeButton darkMode={darkMode} />
-        {/* <div>
+      </div>
+
+      {/* <div>
+          <Hamburger
+            toggled={isMenuOpen}
+            toggle={setMenuOpen}
+            direction="right"
+            duration={0.6}
+          />
+        </div> */}
+
+      {/* <div>
           {darkModeState ? (
             <a
               className="cursor-pointer hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
@@ -90,7 +128,6 @@ export default function PhotoNavbar(darkMode: any) {
             </a>
           )}
         </div> */}
-      </div>
     </header>
   );
 }

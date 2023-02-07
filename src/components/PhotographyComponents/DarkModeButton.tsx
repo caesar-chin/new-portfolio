@@ -45,7 +45,22 @@ export default function DarkModeButton(darkMode: any) {
 
   return (
     <div className="group">
-      <DarkModeSwitch checked={darkModeState} onChange={changeMode} size={40} />
+      {darkModeState ? (
+        <a
+          className="cursor-pointer hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+          onClick={changeMode}
+        >
+          Dark Mode
+        </a>
+      ) : (
+        <a
+          className="cursor-pointer hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+          onClick={changeMode}
+        >
+          Light Mode
+        </a>
+      )}
+      {/* <DarkModeSwitch checked={darkModeState} onChange={changeMode} size={"2.25rem"} /> */}
     </div>
   );
 }
