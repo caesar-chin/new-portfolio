@@ -1,6 +1,10 @@
 import React from "react";
 
-export default function Navbar(darkMode: any) {
+type NavbarProps = {
+  darkMode: any;
+};
+
+export default function Navbar({ darkMode }: NavbarProps) {
   const [darkModeState, setDarkMode] = React.useState(darkMode);
 
   const initialMode = () => {

@@ -2,7 +2,11 @@ import React from "react";
 import DarkModeButton from "./DarkModeButton";
 import { Spin as Hamburger } from "hamburger-react";
 
-export default function PhotoNavbar(darkMode: any) {
+type PhotoNavbarProps = {
+  darkMode: any;
+};
+
+export default function PhotoNavbar({ darkMode }: PhotoNavbarProps) {
   const [isMenuOpen, setMenuOpen] = React.useState(false);
   // const [darkModeState, setDarkMode] = React.useState(darkMode);
 
@@ -93,7 +97,7 @@ export default function PhotoNavbar(darkMode: any) {
           Street & Landscape
         </a>
         <a
-          href="#contact"
+          href="/photography/contact"
           className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
         >
           Contact

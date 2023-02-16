@@ -1,7 +1,11 @@
 import React from "react";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 
-export default function DarkModeButton(darkMode: any) {
+type DarkModeButtonProps = {
+  darkMode: any;
+};
+
+export default function DarkModeButton({ darkMode }: DarkModeButtonProps) {
   const [darkModeState, setDarkMode] = React.useState(darkMode);
 
   const initialMode = () => {
