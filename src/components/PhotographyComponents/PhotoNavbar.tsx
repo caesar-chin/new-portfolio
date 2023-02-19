@@ -4,9 +4,10 @@ import { Spin as Hamburger } from "hamburger-react";
 
 type PhotoNavbarProps = {
   darkMode: any;
+  title: string;
 };
 
-export default function PhotoNavbar({ darkMode }: PhotoNavbarProps) {
+export default function PhotoNavbar({ darkMode, title }: PhotoNavbarProps) {
   const [isMenuOpen, setMenuOpen] = React.useState(false);
   // const [darkModeState, setDarkMode] = React.useState(darkMode);
 
@@ -84,25 +85,35 @@ export default function PhotoNavbar({ darkMode }: PhotoNavbarProps) {
         >
           About
         </a> */}
+
         <a
           href="/photography/concert"
-          className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+          className={`${
+            title === "concert"
+              ? "text-sea-foam-green dark:text-dark-grayish-red"
+              : ""
+          } hover:text-sea-foam-green dark:hover:text-dark-grayish-red`}
         >
           Concert
         </a>
+
         <a
           href="/photography/streetlandscape"
-          className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+          className={`${
+            title === "streetlandscape"
+              ? "text-sea-foam-green dark:text-dark-grayish-red"
+              : ""
+          } hover:text-sea-foam-green dark:hover:text-dark-grayish-red`}
         >
           Street & Landscape
         </a>
+
         <a
           href="/photography/contact"
           className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
         >
           Contact
         </a>
-
         <DarkModeButton darkMode={darkMode} />
       </div>
 
