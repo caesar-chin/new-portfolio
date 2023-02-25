@@ -24,7 +24,7 @@
     "@nanostores/react": "^0.4.1",
     "@types/react": "^18.0.25",
     "aos": "^2.3.4",
-    "astro": "^1.6.10",
+    "astro": "^2.0.15",
     "astro-seo": "^0.6.0",
     "dotenv": "^16.0.3",
     "hamburger-react": "^2.5.0",
