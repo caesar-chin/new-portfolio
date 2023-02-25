@@ -1,1 +1,0 @@
-#projects:where(.astro-JEPBMQLD),#contact:where(.astro-JEPBMQLD),#home:where(.astro-JEPBMQLD),#footer:where(.astro-JEPBMQLD){animation:fadeInAnimation ease 1s;animation-iteration-count:1;animation-fill-mode:forwards}@keyframes fadeInAnimation{0%{opacity:0}to{opacity:1}}
