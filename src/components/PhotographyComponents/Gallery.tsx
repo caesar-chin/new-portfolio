@@ -20,11 +20,11 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
   const [resizeValue, setResizeValue] = React.useState(40);
   const [expanded, setExpanded] = React.useState(false);
 
-  useEffect(() => {
-    if (window.innerWidth < 770) {
-      setResizeValue(100);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (window.innerWidth < 770) {
+  //     setResizeValue(100);
+  //   }
+  // }, []);
 
   const handleResizeChange = (event: Event, newValue: number | number[]) => {
     console.log(newValue);
