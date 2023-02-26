@@ -30,7 +30,7 @@ export default function PicturesContainer({
             : undefined
         }
       ></div>
-      
+
       <div className={`flex flex-wrap justify-center mt-6`}>
         <img
           src={cherryblossom}
