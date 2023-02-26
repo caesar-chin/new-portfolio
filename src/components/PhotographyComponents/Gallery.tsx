@@ -74,7 +74,7 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
             className="dark:hover:!text-dark-grayish-red hover:!text-sea-foam-green cursor-pointer"
           />
 
-          {/* <Slider
+          <Slider
             style={{ width: "10rem", marginLeft: "1rem", marginRight: "1rem" }}
             value={resizeValue}
             onChange={handleResizeChange}
@@ -82,7 +82,7 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
             min={30}
             max={100}
             className="dark:!text-dark-grayish-red !text-sea-foam-green"
-          /> */}
+          />
 
           <PhotoSizeSelectActualIcon
             style={{ fontSize: "1.875rem", lineHeight: "2.5rem" }}
