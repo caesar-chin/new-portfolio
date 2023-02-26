@@ -1,12 +1,10 @@
 import React, { useEffect } from "react";
-import Slider from "@mui/material/Slider";
-import { styled } from "@mui/material/styles";
-import SortIcon from "@mui/icons-material/Sort";
-import Stack from "@mui/material/Stack";
-import PhotoSizeSelectActualIcon from "@mui/icons-material/PhotoSizeSelectActual";
 import PicturesContainer from "./PicturesContainer";
-import ScrollButton from "./ScrollButton";
+import Slider from "@mui/material/Slider";
 import ScrollToTop from "react-scroll-to-top";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faImage } from "@fortawesome/free-solid-svg-icons";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 type GalleryProps = {
   darkMode: any;
@@ -42,7 +40,6 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
   const maxResize = () => {
     setResizeValue(100);
   };
-
   return (
     <div>
       <ScrollToTop className="dark:bg-dark-grayish-red bg-sea-foam-green flex flex-row justify-center items-center shadow-none rounded-full" />
@@ -60,18 +57,18 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
 
       <div className="flex flex-row justify-between ">
         <button className="cursor-pointer" onClick={handleExpanded}>
-          <SortIcon
-            style={{ fontSize: "1.875rem", lineHeight: "2.5rem" }}
-            className={`dark:hover:!text-dark-grayish-red hover:!text-sea-foam-green  ${
+          <FontAwesomeIcon
+            icon={faBars}
+            className={`dark:hover:!text-dark-grayish-red hover:!text-sea-foam-green text-3xl ${
               expanded && "dark:!text-dark-grayish-red !text-sea-foam-green"
             }`}
           />
         </button>
         <div className="flex flex-row justify-between items-center">
-          <PhotoSizeSelectActualIcon
+          <FontAwesomeIcon
+            icon={faImage}
             onClick={minResize}
-            style={{ fontSize: "1.125rem", lineHeight: "1.75rem" }}
-            className="dark:hover:!text-dark-grayish-red hover:!text-sea-foam-green cursor-pointer"
+            className="dark:hover:!text-dark-grayish-red hover:!text-sea-foam-green cursor-pointer text-lg"
           />
 
           <Slider
@@ -84,9 +81,9 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
             className="dark:!text-dark-grayish-red !text-sea-foam-green"
           />
 
-          <PhotoSizeSelectActualIcon
-            style={{ fontSize: "1.875rem", lineHeight: "2.5rem" }}
-            className="dark:hover:!text-dark-grayish-red hover:!text-sea-foam-green cursor-pointer"
+          <FontAwesomeIcon
+            icon={faImage}
+            className="dark:hover:!text-dark-grayish-red hover:!text-sea-foam-green cursor-pointer text-3xl"
             onClick={maxResize}
           />
         </div>

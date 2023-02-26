@@ -30,11 +30,11 @@ export default function PicturesContainer({
             : undefined
         }
       ></div>
-      
+
       <div className={`flex flex-wrap justify-center mt-6`}>
         <img
           src={cherryblossom}
-          className={`m-4 transition-all duration-500 ease-in-out`}
+          className={`m-4 transition-all ease-in-out`}
           style={{
             objectFit: "cover",
             height: "auto",
@@ -43,7 +43,7 @@ export default function PicturesContainer({
         />
         <img
           src={cherryblossomtwopeople}
-          className={`m-4 transition-all duration-500 ease-in-out`}
+          className={`m-4 transition-all ease-in-out`}
           style={{
             objectFit: "cover",
             height: "auto",
@@ -52,7 +52,7 @@ export default function PicturesContainer({
         />
         <img
           src={ferriswheel}
-          className={`m-4 transition-all duration-500 ease-in-out`}
+          className={`m-4 transition-all ease-in-out`}
           style={{
             objectFit: "cover",
             height: "auto",
@@ -61,7 +61,7 @@ export default function PicturesContainer({
         />
         <img
           src={onetwofive}
-          className={`m-4 transition-all duration-500 ease-in-out`}
+          className={`m-4 transition-all ease-in-out`}
           style={{
             objectFit: "cover",
             height: "auto",
@@ -70,7 +70,7 @@ export default function PicturesContainer({
         />
         <img
           src={penn}
-          className={`m-4 transition-all duration-500 ease-in-out`}
+          className={`m-4 transition-all ease-in-out`}
           style={{
             objectFit: "cover",
             height: "auto",
@@ -79,7 +79,7 @@ export default function PicturesContainer({
         />
         <img
           src={seattle}
-          className={`m-4 transition-all duration-500 ease-in-out`}
+          className={`m-4 transition-all ease-in-out`}
           style={{
             objectFit: "cover",
             height: "auto",
@@ -88,7 +88,7 @@ export default function PicturesContainer({
         />
         <img
           src={washingtonuniversity}
-          className={`m-4 transition-all duration-500 ease-in-out`}
+          className={`m-4 transition-all ease-in-out`}
           style={{
             objectFit: "cover",
             height: "auto",
@@ -97,7 +97,7 @@ export default function PicturesContainer({
         />
         <img
           src={umbrellas}
-          className={`m-4 transition-all duration-500 ease-in-out`}
+          className={`m-4 transition-all ease-in-out`}
           style={{
             objectFit: "cover",
             height: "auto",

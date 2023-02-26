@@ -1,0 +1,1 @@
+#projects:where(.astro-4RPDXY4I),#contact:where(.astro-4RPDXY4I),#home:where(.astro-4RPDXY4I),#footer:where(.astro-4RPDXY4I){animation:fadeInAnimation ease 1s;animation-iteration-count:1;animation-fill-mode:forwards}@keyframes fadeInAnimation{0%{opacity:0}to{opacity:1}}
