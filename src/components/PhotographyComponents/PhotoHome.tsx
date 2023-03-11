@@ -3,8 +3,6 @@ import seattle from "../../assets/seattle.png";
 import umbrellas from "../../assets/umbrellas.png";
 
 export default function PhotoHome() {
-
-
   return (
     <div>
       {/* <div className="text-5xl font-semibold max-sm:text-4xl text-center flex justify-center mb-8 tracking-widest">

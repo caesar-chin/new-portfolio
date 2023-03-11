@@ -3,8 +3,7 @@ import PicturesContainer from "./PicturesContainer";
 import Slider from "@mui/material/Slider";
 import ScrollToTop from "react-scroll-to-top";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faImage } from "@fortawesome/free-solid-svg-icons";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { faImage, faBars, faDownload } from "@fortawesome/free-solid-svg-icons";
 
 type GalleryProps = {
   darkMode: any;
@@ -44,10 +43,10 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
     <div>
       <ScrollToTop className="dark:bg-dark-grayish-red bg-sea-foam-green flex flex-row justify-center items-center shadow-none rounded-full" />
       {title === "streetlandscape" ? (
-        <div className="text-4xl uppercase tracking-widest flex justify-center mb-12">
-          <div suppressHydrationWarning>Street{"\u00A0"}</div>
-          <div>&</div>
-          <div suppressHydrationWarning>{"\u00A0"}Landscape</div>
+        <div className="text-4xl whitespace-pre uppercase tracking-widest flex justify-center mb-12">
+          <div>Street</div>
+          <div> & </div>
+          <div>Landscape</div>
         </div>
       ) : (
         <div className="text-5xl uppercase tracking-widest flex justify-center mb-12">
@@ -89,11 +88,35 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
         </div>
       </div>
 
-      <PicturesContainer
-        title={title}
-        resizeValue={resizeValue}
-        expanded={expanded}
-      />
+      <div
+        id="expanded-menu"
+        style={{ transition: "all 0.5s ease-in-out", height: 0 }}
+        className={
+          expanded
+            ? "transition-all duration-500 ease-in-out mt-4 h-32 w-full bg-white border-[2px] border-black border-solid rounded dark:border-[0px]"
+            : undefined
+        }
+      ></div>
+
+      <div className="mt-8 flex flex-row w-auto justify-between items-center">
+        <div className="flex flex-row w-auto whitespace-pre items-center ml-4">
+          <div className="flex flex-row max-md:flex-col ">
+            <div className="text-lg">{"ERNEST RAREBERGG"}</div>
+            <div className="text-lg max-md:hidden">{" , "}</div>
+            <div className="text-lg">{"BABY'S ALL RIGHT"}</div>
+          </div>
+        </div>
+        <div className="ml-4 flex flex-row w-full items-center before:flex-auto before:border-half before:content-[''] border-white before:mr-4">
+          <div className="cursor-pointer flex flex-row w-auto items-center">
+            <div className="mr-2 max-md:hidden text-lg">
+              DOWNLOAD COLLECTION
+            </div>
+            <FontAwesomeIcon icon={faDownload} className="text-lg" />
+          </div>
+        </div>
+      </div>
+
+      <PicturesContainer title={title} resizeValue={resizeValue} />
     </div>
   );
 }
