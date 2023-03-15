@@ -26,7 +26,7 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
   const [loading, setLoading] = React.useState(true);
   const [imagesList, setImagesList] = React.useState<any>([] as any);
 
-
+  //Small changes
 
   // useEffect(() => {
   //   console.log(imagesList);
