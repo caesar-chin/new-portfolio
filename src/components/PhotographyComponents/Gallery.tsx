@@ -26,8 +26,7 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
   const [loading, setLoading] = React.useState(true);
   const [imagesList, setImagesList] = React.useState<any>([] as any);
 
-  // [{occasionKey: {name: "occasion Name", photo_list: keys.json}},
-  // {occasionKey: {name: "occasion Name", photo_list: keys.json}}]
+
 
   // useEffect(() => {
   //   console.log(imagesList);
