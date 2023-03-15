@@ -19,8 +19,11 @@ module.exports = {
       "actual-red": "#ff0000",
       "actual-green": "#00ff00",
       "faded-grey": "#dde8e4",
+      transparent: "transparent",
     },
     borderWidth: {
+      0: "0px",
+      4: "4px",
       half: "0.5px",
       50: "50px",
     },

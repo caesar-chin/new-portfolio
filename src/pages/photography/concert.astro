@@ -14,9 +14,11 @@ let darkMode = localStorage.getItem("color-theme") === "dark" ? true : false;
   <Layout title="Caesar Chin Concert Photography">
     <div class="container mx-auto">
       <div class="flex items-center flex-col mx-12 pt-2 min-h-screen">
-        <div id="home" class="w-full">
+        <div id="home" class="w-full min-h-screen">
           <PhotoNavbar darkMode={darkMode} title="concert" client:load />
-          <Gallery darkMode={darkMode} title="concert" client:load />
+          <div class="m-h-full">
+            <Gallery darkMode={darkMode} title="concert" client:load />
+          </div>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import React from "react";
-import seattle from "../../assets/seattle.png";
-import umbrellas from "../../assets/umbrellas.png";
+import seattle from "../../assets/seattle.webp";
+import umbrellas from "../../assets/umbrellas.webp";
 
 export default function PhotoHome() {
   return (
