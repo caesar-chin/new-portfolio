@@ -3,7 +3,12 @@ import PicturesContainer from "./PicturesContainer";
 import Slider from "@mui/material/Slider";
 import ScrollToTop from "react-scroll-to-top";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faImage, faBars, faDownload } from "@fortawesome/free-solid-svg-icons";
+import {
+  faImage,
+  faBars,
+  faDownload,
+  faSmileBeam,
+} from "@fortawesome/free-solid-svg-icons";
 
 type GalleryProps = {
   darkMode: any;
@@ -16,6 +21,9 @@ type GalleryProps = {
 export default function Gallery({ darkMode, title }: GalleryProps) {
   const [resizeValue, setResizeValue] = React.useState(40);
   const [expanded, setExpanded] = React.useState(false);
+  const [loadedImages, setLoadedImages] = React.useState([]);
+  const [unloadedImages, setUnloadedImages] = React.useState([]);
+  const [initialLoad, setInitialLoad] = React.useState(true);
   const [occasionKeysList, setOccasionKeysList] = React.useState<any>(
     [] as any
   );
@@ -25,46 +33,48 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
   const [indexList, setIndexList] = React.useState<any>({} as any);
   const [loading, setLoading] = React.useState(true);
   const [imagesList, setImagesList] = React.useState<any>([] as any);
-
+  const [clickedStates, setClickedStates] = React.useState([]);
   //Small changes
 
   // useEffect(() => {
   //   console.log(imagesList);
   // }, [imagesList]);
-
+  const BASE_URL = "https://caesar-chin-photography.s3.amazonaws.com";
   useEffect(() => {
-    fetch(
-      "https://caesar-chin-photography.s3.amazonaws.com/concert/index.json",
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      }
-    )
+    fetch(`${BASE_URL}/concert/index.json`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
+        let count = 0;
         for (let occasion_name in data) {
-          fetch(
-            `https://caesar-chin-photography.s3.amazonaws.com/concert/${occasion_name}/keys.json`,
-            {
-              method: "GET",
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-              },
-            }
-          )
+          fetch(`${BASE_URL}/concert/${occasion_name}/keys.json`, {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          })
             .then((response) => response.json())
             .then((images) => {
+              count += 1;
               var temp_obj = {
                 [occasion_name]: {
                   name: data[occasion_name],
                   images_list: images,
                 },
               };
+              if (count >= 3) {
+                setLoadedImages((prevArr: any) => [...prevArr, temp_obj]);
+              } else {
+                setUnloadedImages((prevArr: any) => [...prevArr, temp_obj]);
+              }
               setImagesList((prevArr: any) => [...prevArr, temp_obj]);
+
               setTimeout(() => {
                 setLoading(false);
               }, 1000);
@@ -80,6 +90,44 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
       setResizeValue(100);
     }
   }, []);
+
+  useEffect(() => {
+    setClickedStates(loadedImages.map(() => false));
+  }, [loadedImages]);
+
+  const downloadZipFile = async (occasion_key: string, index: number) => {
+    setClickedStates((prevState) => {
+      const newClickedStates = [...prevState];
+      newClickedStates[index] = true;
+      return newClickedStates;
+    });
+
+    const fileUrl = `${BASE_URL}/concert/${occasion_key}/${occasion_key}.zip`;
+    const link = document.createElement("a");
+    link.href = fileUrl;
+    link.download = `${occasion_key}.zip`;
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    setTimeout(() => {
+      setClickedStates((prevState) => {
+        const newClickedStates = [...prevState];
+        newClickedStates[index] = false;
+        return newClickedStates;
+      });
+    }, 2000);
+  };
+
+  const loadMorePhotos = () => {
+    console.log(unloadedImages);
+    console.log(loadedImages);
+    for (let i = 0; i < Math.min(3, unloadedImages.length); i++) {
+      setLoadedImages((prevArr: any) => [...prevArr, unloadedImages[i]]);
+      setUnloadedImages((prevArr: any) => prevArr.slice(1));
+    }
+  };
 
   // const handleImageLoad = () => {
   //   Promise.all(
@@ -208,9 +256,25 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
         </div>
 
         <div>
-          {imagesList.map((occasion_key: React.Key, index: any) => {
-            var occasion_name_parts =
-              occasion_key[Object.keys(occasion_key)[0]]["name"].split(", ");
+          {loadedImages.map((occasion_key: React.Key, index: any) => {
+            var occasion_name =
+              occasion_key[Object.keys(occasion_key)[0]]["name"];
+            var occasion_name_parts = [];
+
+            let arr = occasion_name.split(",");
+            if (arr.length > 2) {
+              const secondCommaIndex = occasion_name.indexOf(
+                ",",
+                occasion_name.indexOf(",") + 1
+              );
+              occasion_name_parts = [
+                occasion_name.slice(0, secondCommaIndex),
+                occasion_name.slice(secondCommaIndex + 1).trim(),
+              ];
+            } else if (arr.length === 2 && arr[1].charAt(0) === " ") {
+              occasion_name_parts[0] = arr[0];
+              occasion_name_parts[1] = arr[1].trim();
+            }
 
             var images_list =
               occasion_key[Object.keys(occasion_key)[0]]["images_list"];
@@ -236,15 +300,35 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
                       </div>
                     </div>
                   </div>
-                  <div className="ml-4 flex flex-row w-full items-center before:flex-auto before:border-half before:content-[''] border-white before:mr-4">
-                    <div className="cursor-pointer flex flex-row w-auto items-center">
-                      <div className="mr-2 max-md:hidden text-md">
-                        DOWNLOAD COLLECTION
-                      </div>
-                      <FontAwesomeIcon
-                        icon={faDownload}
-                        className="text-md max-md:text-2xl"
-                      />
+
+                  <div className="ml-4 flex flex-row w-full items-center before:flex-auto before:border-half before:content-[''] border-white before:mr-4 ">
+                    <div className="relative ">
+                      {clickedStates[index] ? (
+                        <div className="cursor-pointer flex flex-row items-center  transition-opacity duration-500 transition-visibility visible opacity-100 ease-in-out opacity-100 ease-in-out">
+                          <div className="mr-2 max-md:hidden text-md">
+                            THANK YOU
+                          </div>
+                          <FontAwesomeIcon
+                            icon={faSmileBeam}
+                            className="text-md max-md:text-2xl"
+                          />
+                        </div>
+                      ) : (
+                        <div
+                          className="cursor-pointer flex flex-row items-center  transition-opacity duration-500 transition-visibility visible opacity-100 ease-in-out"
+                          onClick={() =>
+                            downloadZipFile(Object.keys(occasion_key)[0], index)
+                          }
+                        >
+                          <div className="mr-2 max-md:hidden text-md">
+                            DOWNLOAD COLLECTION
+                          </div>
+                          <FontAwesomeIcon
+                            icon={faDownload}
+                            className="text-md max-md:text-2xl"
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -261,6 +345,25 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
             );
           })}
         </div>
+      </div>
+
+      <div>
+        {loading ? (
+          <div></div>
+        ) : unloadedImages.length > 0 && initialLoad ? (
+          <div className="mt-8 mb-12 text-center border-t-half border-white">
+            <div
+              className="text-2xl mt-4 dark:hover:!text-dark-grayish-red hover:!text-sea-foam-green cursor-pointer"
+              onClick={loadMorePhotos}
+            >
+              LOAD MORE
+            </div>
+          </div>
+        ) : (
+          <div className="mt-8 mb-12 text-center border-t-half border-white">
+            <div className="text-2xl mt-4">You've reached the end!</div>
+          </div>
+        )}
       </div>
     </div>
   );
