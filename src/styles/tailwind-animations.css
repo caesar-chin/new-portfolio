@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .animate-ellipsis {
+    @apply animate-pulse;
+  }
+
+  .animate-fade-out {
+    @apply animate-fadeOut ease-out duration-7500;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    @apply opacity-100;
+  }
+  100% {
+    @apply opacity-0;
+  }
+}
