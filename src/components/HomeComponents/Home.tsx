@@ -10,7 +10,7 @@ import washingtonuniversity from "../../assets/washingtonuniversity.webp";
 import { Fade } from "react-slideshow-image";
 
 import "react-slideshow-image/dist/styles.css";
-import "../../styles/images.css";
+
 
 export default function Home() {
   const imagesArray = [

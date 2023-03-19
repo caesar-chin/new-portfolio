@@ -27,7 +27,25 @@ module.exports = {
       half: "0.5px",
       50: "50px",
     },
-    extend: {},
+    extend: {
+      keyframes: {
+        fadeOut: {
+          "0%": { opacity: "1" },
+          "100%": { opacity: "0" },
+        },
+        fastPulse: {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: ".5" },
+        },
+      },
+      animation: {
+        fadeOut: "fadeOut 7500ms",
+        fastPulse: "fastPulse 1000ms linear infinite",
+      },
+      transitionDuration: {
+        7500: "7500ms",
+      },
+    },
   },
   variants: {
     fill: ["hover", "focus"], // this line does the trick

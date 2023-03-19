@@ -6,6 +6,8 @@ import {
   faArrowRight,
   faDownload,
 } from "@fortawesome/free-solid-svg-icons";
+import DownloadStatus from "./DownloadStatus";
+import { useSwipeable } from "react-swipeable";
 
 type PicturesContainerType = {
   title: string;
@@ -19,10 +21,24 @@ export default function PicturesContainer({
   occasion,
 }: PicturesContainerType) {
   const [fullscreenImage, setFullscreenImage] = useState("");
-  const [originalImage, setOriginalImage] = useState("");
-  const [originalImageName, setOriginalImageName] = useState("");
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(-1);
+  const [isDownloading, setIsDownloading] = React.useState("");
+
+  const handleSwiping = (direction) => {
+    if (direction === "Left") {
+      handleRightArrowClick();
+    } else if (direction === "Right") {
+      handleLeftArrowClick();
+    }
+  };
+
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => handleSwiping("Left"),
+    onSwipedRight: () => handleSwiping("Right"),
+    delta: 10,
+    trackMouse: true,
+  });
 
   const fetchNewImage = async (imageUrl: string, index: any) => {
     setFullscreenImage(imageUrl);
@@ -58,11 +74,18 @@ export default function PicturesContainer({
     }
   };
 
+  const handleChangeDownloadStatus = (status: string) => {
+    setIsDownloading(status);
+  };
+
   const handleDownloadClick = async (e: React.MouseEvent) => {
     e.preventDefault();
+    handleChangeDownloadStatus("downloading");
+    const image = occasion[currentIndex];
+    const image_info = image[Object.keys(image)[0]];
 
     try {
-      const response = await fetch(originalImage);
+      const response = await fetch(image_info["url"]);
       if (!response.ok) {
         throw new Error("Failed to fetch the image");
       }
@@ -71,18 +94,27 @@ export default function PicturesContainer({
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = originalImageName; // you can customize the filename here
+      link.download = Object.keys(image)[0]; // you can customize the filename here
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      setTimeout(() => URL.revokeObjectURL(url), 100);
+      setTimeout(() => {
+        URL.revokeObjectURL(url);
+        handleChangeDownloadStatus("completed");
+      }, 100);
+      setTimeout(() => {
+        handleChangeDownloadStatus("");
+      }, 7500);
     } catch (error) {
       console.error("Error downloading the image:", error);
     }
   };
 
   const handleBackgroundClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
+    if (
+      e.target === e.currentTarget ||
+      e.target === document.querySelector(".fullscreen-image")
+    ) {
       toggleFullscreen();
     }
   };
@@ -120,8 +152,6 @@ export default function PicturesContainer({
               }}
               alt={image[Object.keys(image)[0]]}
               onClick={() => {
-                setOriginalImageName(Object.keys(image)[0]);
-                setOriginalImage(image_info["url"]);
                 handleImageClick(image_info["webp_url"], key);
               }}
             />
@@ -129,23 +159,28 @@ export default function PicturesContainer({
         })}
       </div>
 
+      <div className="fixed bottom-0 left-0 m-4 text-white z-50">
+        <DownloadStatus isDownloading={isDownloading} />
+      </div>
+
       {isFullscreen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75"
-          onClick={handleBackgroundClick}
-        >
-          <div
-            className="relative w-screen h-screen"
-            onClick={handleContentClick}
-          >
-            <div className="absolute inset-0 flex items-center justify-center border">
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-75">
+          <div className="relative w-screen h-screen">
+            <div
+              className="absolute inset-0 flex items-center justify-center border "
+              onClick={handleBackgroundClick}
+              {...swipeHandlers}
+            >
               <img
                 src={fullscreenImage}
                 alt="Fullscreen"
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 fullscreen-image"
                 style={{ maxWidth: "100%", maxHeight: "100%" }}
+                onClick={handleContentClick}
+                draggable={false}
               />
             </div>
+
             <button
               className="absolute top-0 right-0 m-4 text-gray-800 focus:outline-none"
               onClick={toggleFullscreen}
@@ -155,6 +190,7 @@ export default function PicturesContainer({
                 className="dark:hover:!text-dark-grayish-red hover:!text-sea-foam-green text-2xl text-white "
               />
             </button>
+
             {currentIndex === 0 ? (
               <div></div>
             ) : (
@@ -168,6 +204,7 @@ export default function PicturesContainer({
                 />
               </button>
             )}
+
             {currentIndex === occasion.length - 1 ? (
               <div></div>
             ) : (
@@ -181,6 +218,7 @@ export default function PicturesContainer({
                 />
               </button>
             )}
+
             <a
               href={fullscreenImage}
               download
@@ -192,6 +230,18 @@ export default function PicturesContainer({
                 className="dark:hover:!text-dark-grayish-red hover:!text-sea-foam-green text-2xl text-white "
               />
             </a>
+
+            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-white p-4">
+              {`${
+                occasion[currentIndex][Object.keys(occasion[currentIndex])[0]][
+                  "caption"
+                ]
+              }, ${
+                occasion[currentIndex][Object.keys(occasion[currentIndex])[0]][
+                  "date"
+                ]
+              }`}
+            </div>
           </div>
         </div>
       )}

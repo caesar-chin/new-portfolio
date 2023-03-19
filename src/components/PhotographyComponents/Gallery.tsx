@@ -9,6 +9,7 @@ import {
   faDownload,
   faSmileBeam,
 } from "@fortawesome/free-solid-svg-icons";
+import DownloadStatus from "./DownloadStatus";
 
 type GalleryProps = {
   darkMode: any;
@@ -171,6 +172,7 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
   return (
     <div className="h-full">
       <ScrollToTop className="dark:bg-dark-grayish-red bg-sea-foam-green flex flex-row justify-center items-center shadow-none rounded-full" />
+
       {title === "streetlandscape" ? (
         <div className="text-4xl whitespace-pre uppercase tracking-widest flex justify-center mb-12">
           <div>Street</div>
