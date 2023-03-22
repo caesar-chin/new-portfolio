@@ -231,7 +231,7 @@ export default function PicturesContainer({
               />
             </a>
 
-            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-white p-4">
+            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-white p-4 text-center">
               {`${
                 occasion[currentIndex][Object.keys(occasion[currentIndex])[0]][
                   "caption"
