@@ -10,6 +10,7 @@ import {
   faSmileBeam,
 } from "@fortawesome/free-solid-svg-icons";
 import DownloadStatus from "./DownloadStatus";
+import FilterMenu from "./FilterMenu";
 
 type GalleryProps = {
   darkMode: any;
@@ -21,7 +22,7 @@ type GalleryProps = {
 
 export default function Gallery({ darkMode, title }: GalleryProps) {
   const [resizeValue, setResizeValue] = React.useState(40);
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = React.useState(true);
   const [loadedImages, setLoadedImages] = React.useState([]);
   const [unloadedImages, setUnloadedImages] = React.useState([]);
   const [initialLoad, setInitialLoad] = React.useState(true);
@@ -35,6 +36,7 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
   const [loading, setLoading] = React.useState(true);
   const [imagesList, setImagesList] = React.useState<any>([] as any);
   const [clickedStates, setClickedStates] = React.useState([]);
+  const [occasionList, setOccasionList] = React.useState<any>([] as any);
   //Small changes
 
   // useEffect(() => {
@@ -42,7 +44,7 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
   // }, [imagesList]);
   const BASE_URL = "https://caesar-chin-photography.s3.amazonaws.com";
   useEffect(() => {
-    fetch(`${BASE_URL}/concert/index.json`, {
+    fetch(`${BASE_URL}/${title}/index.json`, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -53,7 +55,8 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
       .then((data) => {
         let count = 0;
         for (let occasion_name in data) {
-          fetch(`${BASE_URL}/concert/${occasion_name}/keys.json`, {
+          setOccasionList((prevArr: any) => [...prevArr, data[occasion_name]]);
+          fetch(`${BASE_URL}/${title}/${occasion_name}/keys.json`, {
             method: "GET",
             headers: {
               Accept: "application/json",
@@ -103,7 +106,7 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
       return newClickedStates;
     });
 
-    const fileUrl = `${BASE_URL}/concert/${occasion_key}/${occasion_key}.zip`;
+    const fileUrl = `${BASE_URL}/${title}/${occasion_key}/${occasion_key}.zip`;
     const link = document.createElement("a");
     link.href = fileUrl;
     link.download = `${occasion_key}.zip`;
@@ -169,6 +172,7 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
   const maxResize = () => {
     setResizeValue(100);
   };
+
   return (
     <div className="h-full">
       <ScrollToTop className="dark:bg-dark-grayish-red bg-sea-foam-green flex flex-row justify-center items-center shadow-none rounded-full" />
@@ -221,16 +225,13 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
 
       <div
         id="expanded-menu"
-        style={{ transition: "all 0.5s ease-in-out", height: 0 }}
-        className={
-          expanded
-            ? "transition-all duration-500 ease-in-out mt-4 h-32 w-full bg-white border-[2px] border-black border-solid rounded dark:border-[0px]"
-            : undefined
-        }
+        className={`${
+          expanded ? "opacity-100" : "opacity-0 invisible"
+        } mt-4 w-auto py-2 bg-white rounded shadow-md transition-all duration-200 ease-in border-[2px] border-black border-solid rounded text-black`}
       >
         {expanded ? (
           <div className="text-black">
-            This website is still in construction
+            <FilterMenu occasionList={occasionList} />
           </div>
         ) : (
           <div></div>
