@@ -1,6 +1,7 @@
 import React from "react";
 import seattle from "../../assets/seattle.webp";
 import umbrellas from "../../assets/umbrellas.webp";
+import concert from "../../assets/L1020944.webp"
 
 export default function PhotoHome() {
   return (
@@ -18,7 +19,7 @@ export default function PhotoHome() {
             <p className="text-black text-4xl font-semibold">Concert</p>
           </a>
           <a>
-            <img src={seattle} alt="concert" className="" />
+            <img src={concert} alt="concert" className="" />
           </a>
         </div>
       </div>
