@@ -2,6 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import PhotoNavbar from "../../components/PhotographyComponents/PhotoNavbar";
 import PhotoHome from "../../components/PhotographyComponents/PhotoHome";
+import PhotographyFooter from "../../components/PhotographyComponents/PhotographyFooter";
 export const prerender = true;
 
 let darkMode = localStorage.getItem("color-theme") === "dark" ? true : false;
@@ -17,6 +18,7 @@ let darkMode = localStorage.getItem("color-theme") === "dark" ? true : false;
         <div id="home" class="w-full">
           <PhotoNavbar darkMode={darkMode} title="" client:load />
           <PhotoHome client:load />
+          <PhotographyFooter client:load title="" />
         </div>
       </div>
     </div>
