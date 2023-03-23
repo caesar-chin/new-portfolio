@@ -10,6 +10,7 @@ import {
   faSmileBeam,
 } from "@fortawesome/free-solid-svg-icons";
 import FilterMenu from "./FilterMenu";
+import PhotographyFooter from "./PhotographyFooter";
 
 type GalleryProps = {
   darkMode: any;
@@ -62,8 +63,8 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
           })
             .then((response) => response.json())
             .then((images) => {
-              console.log(images)
-              console.log(count)
+              console.log(images);
+              console.log(count);
               count += 1;
               var temp_obj = {
                 [occasion_name]: {
@@ -421,8 +422,8 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
             </div>
           </div>
         ) : (
-          <div className="mt-8 mb-12 text-center border-t-half border-white">
-            <div className="text-2xl mt-4">You've reached the end!</div>
+          <div>
+            <PhotographyFooter title={title} />
           </div>
         )}
       </div>
