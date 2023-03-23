@@ -114,6 +114,14 @@ export default function PhotoNavbar({ darkMode, title }: PhotoNavbarProps) {
         >
           Contact
         </a>
+
+        <a
+          href="https://www.instagram.com/chinxuehong/"
+          target="_blank"
+          className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+        >
+          Instagram
+        </a>
         <DarkModeButton darkMode={darkMode} />
       </div>
 

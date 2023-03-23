@@ -46,6 +46,7 @@ module.exports = {
       },
       transitionDuration: {
         7500: '7500ms',
+        1500: "1500ms"
       },
       backgroundColor: {
         'dark-grayish-red': '#b24a43',

@@ -9,7 +9,6 @@ import {
   faDownload,
   faSmileBeam,
 } from "@fortawesome/free-solid-svg-icons";
-import DownloadStatus from "./DownloadStatus";
 import FilterMenu from "./FilterMenu";
 
 type GalleryProps = {
@@ -17,31 +16,25 @@ type GalleryProps = {
   title: string;
 };
 
+interface DataObject {
+  [key: string]: string;
+}
+
 // "dark-grayish-red": "#b24a43",
 // "sea-foam-green": "#A5DEC8",
 
 export default function Gallery({ darkMode, title }: GalleryProps) {
   const [resizeValue, setResizeValue] = React.useState(40);
-  const [expanded, setExpanded] = React.useState(true);
+  const [expanded, setExpanded] = React.useState(false);
   const [loadedImages, setLoadedImages] = React.useState([]);
   const [unloadedImages, setUnloadedImages] = React.useState([]);
   const [initialLoad, setInitialLoad] = React.useState(true);
-  const [occasionKeysList, setOccasionKeysList] = React.useState<any>(
-    [] as any
-  );
-  const [occasionValuesList, setOccasionValuesList] = React.useState<any>(
-    [] as any
-  );
-  const [indexList, setIndexList] = React.useState<any>({} as any);
   const [loading, setLoading] = React.useState(true);
-  const [imagesList, setImagesList] = React.useState<any>([] as any);
+  const [imagesList, setImagesList] = React.useState<any>({});
   const [clickedStates, setClickedStates] = React.useState([]);
-  const [occasionList, setOccasionList] = React.useState<any>([] as any);
+  const [occasionList, setOccasionList] = React.useState<DataObject>({});
   //Small changes
 
-  // useEffect(() => {
-  //   console.log(imagesList);
-  // }, [imagesList]);
   const BASE_URL = "https://caesar-chin-photography.s3.amazonaws.com";
   useEffect(() => {
     fetch(`${BASE_URL}/${title}/index.json`, {
@@ -53,9 +46,9 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
     })
       .then((response) => response.json())
       .then((data) => {
+        setOccasionList(data);
         let count = 0;
         for (let occasion_name in data) {
-          setOccasionList((prevArr: any) => [...prevArr, data[occasion_name]]);
           fetch(`${BASE_URL}/${title}/${occasion_name}/keys.json`, {
             method: "GET",
             headers: {
@@ -77,7 +70,10 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
               } else {
                 setUnloadedImages((prevArr: any) => [...prevArr, temp_obj]);
               }
-              setImagesList((prevArr: any) => [...prevArr, temp_obj]);
+              setImagesList((prevState: any) => ({
+                ...prevState,
+                ...temp_obj,
+              }));
 
               setTimeout(() => {
                 setLoading(false);
@@ -98,6 +94,10 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
   useEffect(() => {
     setClickedStates(loadedImages.map(() => false));
   }, [loadedImages]);
+
+  // useEffect(() => {
+  //   console.log(imagesList);
+  // }, [imagesList]);
 
   const downloadZipFile = async (occasion_key: string, index: number) => {
     setClickedStates((prevState) => {
@@ -125,8 +125,6 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
   };
 
   const loadMorePhotos = () => {
-    console.log(unloadedImages);
-    console.log(loadedImages);
     for (let i = 0; i < Math.min(3, unloadedImages.length); i++) {
       setLoadedImages((prevArr: any) => [...prevArr, unloadedImages[i]]);
       setUnloadedImages((prevArr: any) => prevArr.slice(1));
@@ -171,6 +169,53 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
 
   const maxResize = () => {
     setResizeValue(100);
+  };
+
+  const handleCustomLoadedImages = (occasion_obj: Object) => {
+    if (Object.keys(occasion_obj).length !== 0) {
+      setLoading(true);
+
+      var new_loaded_images = [];
+      for (let occasions_keys in occasion_obj)
+        new_loaded_images.push({
+          [occasions_keys]: imagesList[occasions_keys],
+        });
+      console.log(new_loaded_images);
+      setLoadedImages(new_loaded_images);
+      setInitialLoad(false);
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+    } else if (Object.keys(occasion_obj).length === 0 && !initialLoad) {
+      setLoading(true);
+      setInitialLoad(true);
+
+      const firstThree = Object.keys(imagesList).slice(0, 3);
+      const rest = Object.keys(imagesList).slice(3);
+
+      const firstThreeArray = [];
+      const restArray = [];
+
+      for (let occasion_key of firstThree) {
+        firstThreeArray.push({
+          [occasion_key]: imagesList[occasion_key],
+        });
+      }
+
+      for (let occasion_key of rest) {
+        restArray.push({
+          [occasion_key]: imagesList[occasion_key],
+        });
+      }
+
+      setLoadedImages(firstThreeArray);
+      setUnloadedImages(restArray);
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+    }
   };
 
   return (
@@ -226,21 +271,25 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
       <div
         id="expanded-menu"
         className={`${
-          expanded ? "opacity-100" : "opacity-0 invisible"
+          expanded ? "opacity-100 visible h-auto" : "opacity-0 invisible h-0"
         } mt-4 w-auto py-2 bg-white rounded shadow-md transition-all duration-200 ease-in border-[2px] border-black border-solid rounded text-black`}
       >
-        {expanded ? (
-          <div className="text-black">
-            <FilterMenu occasionList={occasionList} />
-          </div>
-        ) : (
-          <div></div>
-        )}
+        <div
+          className={`${
+            expanded ? "opacity-100 visible h-auto" : "opacity-0 invisible h-0"
+          } text-black`}
+        >
+          <FilterMenu
+            occasionList={occasionList}
+            handleCustomLoadedImages={handleCustomLoadedImages}
+            loading={loading}
+          />
+        </div>
       </div>
 
       <div>
         <div
-          className={`flex flex-col items-center justify-center mt-24 transition-opacity duration-1500 animate-pulse 
+          className={`flex flex-col items-center justify-center mt-24 transition-all duration-1500 animate-pulse 
             ${loading ? "opacity-100 block" : "opacity-0 hidden"}
             `}
         >
@@ -258,7 +307,11 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
           </div>
         </div>
 
-        <div>
+        <div
+          className={`${
+            loading ? "opacity-0 invisible" : "opacity-100 visible"
+          } transition-all duration-1500`}
+        >
           {loadedImages.map((occasion_key: React.Key, index: any) => {
             var occasion_name =
               occasion_key[Object.keys(occasion_key)[0]]["name"];
@@ -283,12 +336,7 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
               occasion_key[Object.keys(occasion_key)[0]]["images_list"];
 
             return (
-              <div
-                key={index}
-                className={`${
-                  loading ? "opacity-0" : "opacity-100"
-                } transition-opacity duration-1000`}
-              >
+              <div key={index} className={`${loading ? "hidden" : "block"}`}>
                 <div className="mt-8 flex flex-row w-auto justify-between items-center">
                   <div className="flex flex-row w-auto whitespace-pre items-center ml-4">
                     <div className="flex flex-row max-md:flex-col ">
@@ -307,7 +355,7 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
                   <div className="ml-4 flex flex-row w-full items-center before:flex-auto before:border-half before:content-[''] border-white before:mr-4 ">
                     <div className="relative ">
                       {clickedStates[index] ? (
-                        <div className="cursor-pointer flex flex-row items-center  transition-opacity duration-500 transition-visibility visible opacity-100 ease-in-out opacity-100 ease-in-out">
+                        <div className="cursor-pointer flex flex-row items-center transition-opacity duration-500 transition-visibility visible opacity-100 ease-in-out opacity-100 ease-in-out">
                           <div className="mr-2 max-md:hidden text-md">
                             THANK YOU
                           </div>
@@ -318,7 +366,7 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
                         </div>
                       ) : (
                         <div
-                          className="cursor-pointer flex flex-row items-center  transition-opacity duration-500 transition-visibility visible opacity-100 ease-in-out"
+                          className="cursor-pointer flex flex-row items-center transition-opacity duration-500 transition-visibility visible opacity-100 ease-in-out"
                           onClick={() =>
                             downloadZipFile(Object.keys(occasion_key)[0], index)
                           }
@@ -336,7 +384,11 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
                   </div>
                 </div>
 
-                <div className={loading ? "hidden" : "block"}>
+                <div
+                  className={`${
+                    loading ? "hidden" : "block"
+                  } transition-all duration-1500`}
+                >
                   <PicturesContainer
                     title={title}
                     resizeValue={resizeValue}
