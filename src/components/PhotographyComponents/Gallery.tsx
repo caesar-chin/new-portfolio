@@ -35,6 +35,10 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
   const [occasionList, setOccasionList] = React.useState<DataObject>({});
   //Small changes
 
+  // React.useEffect(() => {
+  //   console.log(loadedImages);
+  // }, [loadedImages]);
+
   const BASE_URL = "https://caesar-chin-photography.s3.amazonaws.com";
   useEffect(() => {
     fetch(`${BASE_URL}/${title}/index.json`, {
@@ -58,6 +62,8 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
           })
             .then((response) => response.json())
             .then((images) => {
+              console.log(images)
+              console.log(count)
               count += 1;
               var temp_obj = {
                 [occasion_name]: {
@@ -65,7 +71,7 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
                   images_list: images,
                 },
               };
-              if (count >= 3) {
+              if (count < 3) {
                 setLoadedImages((prevArr: any) => [...prevArr, temp_obj]);
               } else {
                 setUnloadedImages((prevArr: any) => [...prevArr, temp_obj]);
