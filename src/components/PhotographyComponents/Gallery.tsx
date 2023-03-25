@@ -63,8 +63,6 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
           })
             .then((response) => response.json())
             .then((images) => {
-              console.log(images);
-              console.log(count);
               count += 1;
               var temp_obj = {
                 [occasion_name]: {
@@ -413,7 +411,7 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
         {loading ? (
           <div></div>
         ) : unloadedImages.length > 0 && initialLoad ? (
-          <div className="mt-8 mb-12 text-center border-t-half border-white">
+          <div className="mt-8 mb-8 text-center">
             <div
               className="text-2xl mt-4 dark:hover:!text-dark-grayish-red hover:!text-sea-foam-green cursor-pointer"
               onClick={loadMorePhotos}
@@ -422,10 +420,11 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
             </div>
           </div>
         ) : (
-          <div>
-            <PhotographyFooter title={title} />
-          </div>
+          <div></div>
         )}
+      </div>
+      <div>
+        <PhotographyFooter title={title} />
       </div>
     </div>
   );

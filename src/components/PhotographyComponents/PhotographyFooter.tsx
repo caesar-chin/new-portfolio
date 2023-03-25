@@ -59,12 +59,6 @@ export default function PhotographyFooter({ title }: PhotographyFooterType) {
           Street & Landscape
         </a>
         <a
-          href="/photography/contact"
-          className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
-        >
-          Contact
-        </a>
-        <a
           href="https://www.instagram.com/chinxuehong/"
           target="_blank"
           className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
