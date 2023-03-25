@@ -2,6 +2,7 @@ import React from "react";
 import seattle from "../../assets/seattle.webp";
 import umbrellas from "../../assets/umbrellas.webp";
 import concert from "../../assets/L1020944.webp"
+import streetlandscape from "../../assets/L1020155.webp"
 
 export default function PhotoHome() {
   return (
@@ -35,7 +36,7 @@ export default function PhotoHome() {
             </p>
           </a>
           <a>
-            <img src={umbrellas} alt="street_landscape" className="" />
+            <img src={streetlandscape} alt="street_landscape" className="" />
           </a>
         </div>
       </div>
