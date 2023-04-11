@@ -58,14 +58,14 @@ export default function Navbar({ darkMode }: NavbarProps) {
         <div className="">
           <a
             href="/"
-            className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red dark:text-dark-grayish-red dark text-sea-foam-green"
+            className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red dark:text-dark-grayish-red dark text-sea-foam-green underline underline-offset-8"
           >
             full-stack developer
           </a>{" "}
           &{" "}
           <a
             href="/photography"
-            className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+            className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red underline underline-offset-8"
           >
             photographer
           </a>

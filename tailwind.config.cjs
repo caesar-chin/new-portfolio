@@ -42,7 +42,7 @@ module.exports = {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: ".5" },
         },
-      },
+      }, 
       animation: {
         fadeOut: "fadeOut 7500ms",
         fastPulse: "fastPulse 1000ms linear infinite",
