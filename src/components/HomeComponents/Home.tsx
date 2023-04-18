@@ -11,7 +11,6 @@ import { Fade } from "react-slideshow-image";
 
 import "react-slideshow-image/dist/styles.css";
 
-
 export default function Home() {
   const imagesArray = [
     {
@@ -65,10 +64,16 @@ export default function Home() {
         <Fade arrows={false} duration={3000} transitionDuration={1500}>
           {imagesArray.map((image) => (
             <div
-              className="flex flex-row justify-center each-fade"
+              className="flex flex-row justify-center each-fade "
               key={image.id}
             >
-              <img className="image-clip" src={image.image} alt={image.alt} />
+              <a href="/photography" className="">
+                <img
+                  className="image-clip hover:cursor-pointer"
+                  src={image.image}
+                  alt={image.alt}
+                />
+              </a>
             </div>
           ))}
         </Fade>
