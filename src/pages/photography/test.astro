@@ -1,0 +1,43 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PhotoNavbar from "../../components/PhotographyComponents/PhotoNavbar";
+import PhotoHome from "../../components/PhotographyComponents/PhotoHome";
+export const prerender = true;
+
+let darkMode = localStorage.getItem("color-theme") === "dark" ? true : false;
+---
+
+<div
+  class="bg-white dark:bg-darkish-cyan text-black dark:text-white"
+  id="background"
+>
+  <Layout title="Caesar Chin Photography">
+    <div class="container mx-auto">
+      <div class="flex items-center flex-col mx-12 pt-2 min-h-screen">
+        <div id="home" class="w-full">
+          Hello
+        </div>
+      </div>
+    </div>
+  </Layout>
+</div>
+
+<style>
+  #projects,
+  #contact,
+  #home,
+  #footer {
+    animation: fadeInAnimation ease 1s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes fadeInAnimation {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+</style>

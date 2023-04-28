@@ -1,7 +1,14 @@
 import React from "react";
 import DarkModeButton from "./DarkModeButton";
+import { Spin as Hamburger } from "hamburger-react";
 
-export default function PhotoNavbar(darkMode: any) {
+type PhotoNavbarProps = {
+  darkMode: any;
+  title: string;
+};
+
+export default function PhotoNavbar({ darkMode, title }: PhotoNavbarProps) {
+  const [isMenuOpen, setMenuOpen] = React.useState(false);
   // const [darkModeState, setDarkMode] = React.useState(darkMode);
 
   // const initialMode = () => {
@@ -46,7 +53,7 @@ export default function PhotoNavbar(darkMode: any) {
   // };
 
   return (
-    <header className="flex justify-between flex-row mb-4">
+    <header className="mb-8 flex flex-row justify-between">
       <div className="flex flex-col">
         <a
           href="/photography"
@@ -57,23 +64,70 @@ export default function PhotoNavbar(darkMode: any) {
         <div className="">
           <a
             href="/"
-            className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+            className="underline underline-offset-8 hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
           >
             full-stack developer
           </a>{" "}
           &{" "}
           <a
             href="/photography"
-            className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+            className="dark text-sea-foam-green underline underline-offset-8 hover:text-sea-foam-green dark:text-dark-grayish-red dark:hover:text-dark-grayish-red"
           >
             photographer
           </a>
         </div>
       </div>
 
-      <div className="flex flex-row items-center">
+      <div className="flex flex-col">
+        {/* <a
+          href="/about"
+          className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+        >
+          About
+        </a> */}
+
+        <a
+          href="/photography/concert"
+          className={`${
+            title === "concert"
+              ? "text-sea-foam-green dark:text-dark-grayish-red"
+              : ""
+          } hover:text-sea-foam-green dark:hover:text-dark-grayish-red `}
+        >
+          Concert
+        </a>
+
+        <a
+          href="/photography/streetlandscape"
+          className={`${
+            title === "streetlandscape"
+              ? "text-sea-foam-green dark:text-dark-grayish-red"
+              : ""
+          } hover:text-sea-foam-green dark:hover:text-dark-grayish-red `}
+        >
+          Street & Landscape
+        </a>
+
+        <a
+          href="https://www.instagram.com/chinxuehong/"
+          target="_blank"
+          className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+        >
+          Instagram
+        </a>
         <DarkModeButton darkMode={darkMode} />
-        {/* <div>
+      </div>
+
+      {/* <div>
+          <Hamburger
+            toggled={isMenuOpen}
+            toggle={setMenuOpen}
+            direction="right"
+            duration={0.6}
+          />
+        </div> */}
+
+      {/* <div>
           {darkModeState ? (
             <a
               className="cursor-pointer hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
@@ -90,7 +144,6 @@ export default function PhotoNavbar(darkMode: any) {
             </a>
           )}
         </div> */}
-      </div>
     </header>
   );
 }

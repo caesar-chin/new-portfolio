@@ -1,16 +1,15 @@
 import React from "react";
-import cherryblossom from "../../assets/cherryblossom.png";
-import cherryblossomtwopeople from "../../assets/cherryblossomtwopeople.png";
-import ferriswheel from "../../assets/ferriswheel.png";
-import onetwofive from "../../assets/onetwofive.png";
-import penn from "../../assets/penn.png";
-import seattle from "../../assets/seattle.png";
-import umbrellas from "../../assets/umbrellas.png";
-import washingtonuniversity from "../../assets/washingtonuniversity.png";
+import cherryblossom from "../../assets/cherryblossom.webp";
+import cherryblossomtwopeople from "../../assets/cherryblossomtwopeople.webp";
+import ferriswheel from "../../assets/ferriswheel.webp";
+import onetwofive from "../../assets/onetwofive.webp";
+import penn from "../../assets/penn.webp";
+import seattle from "../../assets/seattle.webp";
+import umbrellas from "../../assets/umbrellas.webp";
+import washingtonuniversity from "../../assets/washingtonuniversity.webp";
 import { Fade } from "react-slideshow-image";
 
 import "react-slideshow-image/dist/styles.css";
-import "../../styles/images.css";
 
 export default function Home() {
   const imagesArray = [
@@ -58,17 +57,23 @@ export default function Home() {
 
   return (
     <div>
-      <div className="mt-12 mx-12 text-5xl font-semibold max-sm:text-4xl text-center">
+      <div className="mx-12 mt-12 text-center text-5xl font-semibold max-sm:text-4xl">
         DEVELOPING SMOOTH USER EXPERIENCES
       </div>
       <div className="mt-12 mb-52">
         <Fade arrows={false} duration={3000} transitionDuration={1500}>
           {imagesArray.map((image) => (
             <div
-              className="flex flex-row justify-center each-fade"
+              className="each-fade flex flex-row justify-center "
               key={image.id}
             >
-              <img className="image-clip" src={image.image} alt={image.alt} />
+              <a href="/photography" className="">
+                <img
+                  className="image-clip hover:cursor-pointer"
+                  src={image.image}
+                  alt={image.alt}
+                />
+              </a>
             </div>
           ))}
         </Fade>
