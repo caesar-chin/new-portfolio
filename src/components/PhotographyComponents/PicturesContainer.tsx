@@ -138,14 +138,14 @@ export default function PicturesContainer({
 
   return (
     <div>
-      <div className={`flex flex-wrap justify-center mt-6 `}>
+      <div className={`mt-6 flex flex-wrap justify-center `}>
         {occasion.map((image: { [x: string]: any }, key: React.Key) => {
           var image_info = image[Object.keys(image)[0]];
           return (
             <img
               key={key}
               src={image_info["webp_url"]}
-              className={`m-4 transition-all ease-in-out object-scale-down hover:opacity-25 cursor-pointer`}
+              className={`m-4 cursor-pointer object-scale-down transition-all ease-in-out hover:opacity-25`}
               style={{
                 height: "auto",
                 width: `${resizeValue}%`,
@@ -159,22 +159,22 @@ export default function PicturesContainer({
         })}
       </div>
 
-      <div className="fixed bottom-0 left-0 m-4 text-white z-50">
+      <div className="fixed bottom-0 left-0 z-50 m-4 text-white">
         <DownloadStatus isDownloading={isDownloading} />
       </div>
 
       {isFullscreen && (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-75">
-          <div className="relative w-screen h-screen">
+          <div className="relative h-screen w-screen">
             <div
-              className="absolute inset-0 flex items-center justify-center border "
+              className="border absolute inset-0 flex items-center justify-center "
               onClick={handleBackgroundClick}
               {...swipeHandlers}
             >
               <img
                 src={fullscreenImage}
                 alt="Fullscreen"
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 fullscreen-image"
+                className="fullscreen-image absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform"
                 style={{ maxWidth: "100%", maxHeight: "100%" }}
                 onClick={handleContentClick}
                 draggable={false}
@@ -187,7 +187,7 @@ export default function PicturesContainer({
             >
               <FontAwesomeIcon
                 icon={xmark}
-                className="dark:hover:!text-dark-grayish-red hover:!text-sea-foam-green text-2xl text-white "
+                className="text-2xl text-white hover:!text-sea-foam-green dark:hover:!text-dark-grayish-red "
               />
             </button>
 
@@ -195,12 +195,12 @@ export default function PicturesContainer({
               <div></div>
             ) : (
               <button
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-800 focus:outline-none"
+                className="absolute left-4 top-1/2 -translate-y-1/2 transform text-gray-800 focus:outline-none"
                 onClick={handleLeftArrowClick}
               >
                 <FontAwesomeIcon
                   icon={faArrowLeft}
-                  className="dark:hover:!text-dark-grayish-red hover:!text-sea-foam-green text-2xl text-white "
+                  className="text-2xl text-white hover:!text-sea-foam-green dark:hover:!text-dark-grayish-red "
                 />
               </button>
             )}
@@ -209,12 +209,12 @@ export default function PicturesContainer({
               <div></div>
             ) : (
               <button
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-800 focus:outline-none"
+                className="absolute right-4 top-1/2 -translate-y-1/2 transform text-gray-800 focus:outline-none"
                 onClick={handleRightArrowClick}
               >
                 <FontAwesomeIcon
                   icon={faArrowRight}
-                  className="dark:hover:!text-dark-grayish-red hover:!text-sea-foam-green text-2xl text-white "
+                  className="text-2xl text-white hover:!text-sea-foam-green dark:hover:!text-dark-grayish-red "
                 />
               </button>
             )}
@@ -223,15 +223,15 @@ export default function PicturesContainer({
               href={fullscreenImage}
               download
               onClick={handleDownloadClick}
-              className="dark:hover:!text-dark-grayish-red hover:!text-sea-foam-green text-gray-800 absolute bottom-0 right-0 m-4 focus:outline-none flex items-center"
+              className="absolute bottom-0 right-0 m-4 flex items-center text-gray-800 hover:!text-sea-foam-green focus:outline-none dark:hover:!text-dark-grayish-red"
             >
               <FontAwesomeIcon
                 icon={faDownload}
-                className="dark:hover:!text-dark-grayish-red hover:!text-sea-foam-green text-2xl text-white "
+                className="text-2xl text-white hover:!text-sea-foam-green dark:hover:!text-dark-grayish-red "
               />
             </a>
 
-            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-white p-4 text-center">
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 transform p-4 text-center text-white">
               {`${
                 occasion[currentIndex][Object.keys(occasion[currentIndex])[0]][
                   "caption"

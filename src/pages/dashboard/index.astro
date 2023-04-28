@@ -1,8 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import PhotoNavbar from "../../components/PhotographyComponents/PhotoNavbar";
-import PhotoHome from "../../components/PhotographyComponents/PhotoHome";
-import PhotographyFooter from "../../components/PhotographyComponents/PhotographyFooter";
+import Login from "../../components/DashboardComponents/Login";
 export const prerender = true;
 
 let darkMode = localStorage.getItem("color-theme") === "dark" ? true : false;
@@ -12,13 +10,13 @@ let darkMode = localStorage.getItem("color-theme") === "dark" ? true : false;
   class="bg-white text-black dark:bg-darkish-cyan dark:text-white"
   id="background"
 >
-  <Layout title="Caesar Chin Photography">
+  <Layout title="Photography Dashboard">
     <div class="container mx-auto">
       <div class="mx-12 flex min-h-screen flex-col items-center pt-2">
-        <div id="home" class="w-full">
-          <PhotoNavbar darkMode={darkMode} title="" client:load />
-          <PhotoHome client:load />
-          <PhotographyFooter client:load title="" />
+        <div id="home" class="min-h-screen w-full">
+          <div class="m-h-full">
+            <Login darkMode={darkMode} client:load />
+          </div>
         </div>
       </div>
     </div>

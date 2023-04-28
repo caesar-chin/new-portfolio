@@ -1,5 +1,5 @@
 import React from "react";
-import '../../styles/tailwind-animations.css';
+import "../../styles/tailwind-animations.css";
 
 type DownloadStatusType = {
   isDownloading: string;

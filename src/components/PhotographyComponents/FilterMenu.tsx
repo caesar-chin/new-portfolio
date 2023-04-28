@@ -165,12 +165,12 @@ export default function FilterMenu({
               value={searchInputValue}
               onChange={handleSearchChange}
               placeholder="Search"
-              className="my-2 bg-transparent border border-black text-gray-900 text-sm rounded-lg focus:ring-sea-foam-green focus:border-sea-foam-green block w-full p-2.5 dark:bg-transparent dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-dark-grayish-red dark:focus:border-dark-grayish-red"
+              className="border my-2 block w-full rounded-lg border-black bg-transparent p-2.5 text-sm text-gray-900 focus:border-sea-foam-green focus:ring-sea-foam-green dark:border-gray-600 dark:bg-transparent dark:text-black dark:placeholder-gray-400 dark:focus:border-dark-grayish-red dark:focus:ring-dark-grayish-red"
             />
             {searchInputValue && (
               <button
                 onClick={clearSearch}
-                className="ml-2 text-xl dark:hover:!text-dark-grayish-red hover:!text-sea-foam-green border border-black p-2.5"
+                className="border ml-2 border-black p-2.5 text-xl hover:!text-sea-foam-green dark:hover:!text-dark-grayish-red"
               >
                 <FontAwesomeIcon icon={faX} />
               </button>
@@ -194,11 +194,11 @@ export default function FilterMenu({
                       }
                       onMouseEnter={handleMouseEnter}
                       onMouseLeave={handleMouseLeave}
-                      className="w-4 h-4 rounded dark:text-red-600 text-sea-foam-green"
+                      className="h-4 w-4 rounded text-sea-foam-green dark:text-red-600"
                     />
                   )}
                   <label
-                    className="text-lg py-2 ml-2 text-sm text-black dark:hover:!text-dark-grayish-red hover:!text-sea-foam-green"
+                    className="ml-2 py-2 text-lg text-sm text-black hover:!text-sea-foam-green dark:hover:!text-dark-grayish-red"
                     onClick={() =>
                       handleCheckboxChange(Object.keys(occasion)[0])
                     }
@@ -212,15 +212,15 @@ export default function FilterMenu({
         })}
       </div>
 
-      <div className="flex ml-4 mt-1 text-md">
+      <div className="text-md ml-4 mt-1 flex">
         <div
-          className="dark:hover:!text-dark-grayish-red hover:!text-sea-foam-green cursor-pointer mr-2"
+          className="mr-2 cursor-pointer hover:!text-sea-foam-green dark:hover:!text-dark-grayish-red"
           onClick={handleApplyButton}
         >
           Apply
         </div>
         <div
-          className="dark:hover:!text-dark-grayish-red hover:!text-sea-foam-green cursor-pointer"
+          className="cursor-pointer hover:!text-sea-foam-green dark:hover:!text-dark-grayish-red"
           onClick={setAllCheckboxToFalse}
         >
           Clear

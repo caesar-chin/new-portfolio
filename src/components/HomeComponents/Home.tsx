@@ -57,14 +57,14 @@ export default function Home() {
 
   return (
     <div>
-      <div className="mt-12 mx-12 text-5xl font-semibold max-sm:text-4xl text-center">
+      <div className="mx-12 mt-12 text-center text-5xl font-semibold max-sm:text-4xl">
         DEVELOPING SMOOTH USER EXPERIENCES
       </div>
       <div className="mt-12 mb-52">
         <Fade arrows={false} duration={3000} transitionDuration={1500}>
           {imagesArray.map((image) => (
             <div
-              className="flex flex-row justify-center each-fade "
+              className="each-fade flex flex-row justify-center "
               key={image.id}
             >
               <a href="/photography" className="">

@@ -1,8 +1,8 @@
 import React from "react";
 import seattle from "../../assets/seattle.webp";
 import umbrellas from "../../assets/umbrellas.webp";
-import concert from "../../assets/L1020944.webp"
-import streetlandscape from "../../assets/L1020155.webp"
+import concert from "../../assets/L1020944.webp";
+import streetlandscape from "../../assets/L1020155.webp";
 
 export default function PhotoHome() {
   return (
@@ -11,13 +11,13 @@ export default function PhotoHome() {
         HOME
       </div> */}
 
-      <div className="flex justify-center my-8">
+      <div className="my-8 flex justify-center">
         <div className="relative">
           <a
             href="/photography/concert"
-            className="absolute inset-0 z-10 bg-white text-center flex flex-col items-center justify-center opacity-0 hover:opacity-100 bg-opacity-90 duration-300"
+            className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white bg-opacity-90 text-center opacity-0 duration-300 hover:opacity-100"
           >
-            <p className="text-black text-4xl font-semibold">Concert</p>
+            <p className="text-4xl font-semibold text-black">Concert</p>
           </a>
           <a>
             <img src={concert} alt="concert" className="" />
@@ -25,13 +25,13 @@ export default function PhotoHome() {
         </div>
       </div>
 
-      <div className="flex justify-center mb-8">
+      <div className="mb-8 flex justify-center">
         <div className="relative">
           <a
             href="/photography/streetlandscape"
-            className="absolute inset-0 z-10 bg-white text-center flex flex-col items-center justify-center opacity-0 hover:opacity-100 bg-opacity-90 duration-300"
+            className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white bg-opacity-90 text-center opacity-0 duration-300 hover:opacity-100"
           >
-            <p className="text-black text-4xl font-semibold">
+            <p className="text-4xl font-semibold text-black">
               Street & Landscape
             </p>
           </a>

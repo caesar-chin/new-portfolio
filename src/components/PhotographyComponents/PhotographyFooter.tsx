@@ -6,7 +6,7 @@ type PhotographyFooterType = {
 
 export default function PhotographyFooter({ title }: PhotographyFooterType) {
   return (
-    <div className="flex flex-row justify-between border-t-half border-faded-grey mt-32 mb-16 pt-8">
+    <div className="mt-32 mb-16 flex flex-row justify-between border-t-half border-faded-grey pt-8">
       <div>
         <a
           href="/photography"
@@ -15,15 +15,15 @@ export default function PhotographyFooter({ title }: PhotographyFooterType) {
           Caesar Chin
         </a>
         <div>built with Astro and React</div>
-        <div className="flex flex-row my-4">
+        <div className="my-4 flex flex-row">
           <a href="https://github.com/caesar-chin" target="_blank">
-            <button className="mt-4 text-xl w-28 text-center rounded-full leading-10 border-[2px] border-faded-grey hover:border-sea-foam-green dark:hover:border-dark-grayish-red dark:border-faded-grey mr-4">
+            <button className="mt-4 mr-4 w-28 rounded-full border-[2px] border-faded-grey text-center text-xl leading-10 hover:border-sea-foam-green dark:border-faded-grey dark:hover:border-dark-grayish-red">
               Github
             </button>
           </a>
 
           <a href="https://www.linkedin.com/in/caesar-chin/" target="_blank">
-            <button className="mt-4 text-xl w-28 text-center rounded-full leading-10 border-[2px] border-faded-grey hover:border-sea-foam-green dark:hover:border-dark-grayish-red dark:border-faded-grey mr-4">
+            <button className="mt-4 mr-4 w-28 rounded-full border-[2px] border-faded-grey text-center text-xl leading-10 hover:border-sea-foam-green dark:border-faded-grey dark:hover:border-dark-grayish-red">
               LinkedIn
             </button>
           </a>

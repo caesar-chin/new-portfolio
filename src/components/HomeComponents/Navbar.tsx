@@ -47,7 +47,7 @@ export default function Navbar({ darkMode }: NavbarProps) {
   };
 
   return (
-    <header className="flex justify-between flex-row mb-4 ">
+    <header className="mb-4 flex flex-row justify-between ">
       <div className="flex flex-col">
         <a
           href="/"
@@ -58,14 +58,14 @@ export default function Navbar({ darkMode }: NavbarProps) {
         <div className="">
           <a
             href="/"
-            className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red dark:text-dark-grayish-red dark text-sea-foam-green underline underline-offset-8"
+            className=" text-sea-foam-green underline underline-offset-8 hover:text-sea-foam-green dark:text-dark-grayish-red dark:hover:text-dark-grayish-red"
           >
             full-stack developer
           </a>{" "}
           &{" "}
           <a
             href="/photography"
-            className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red underline underline-offset-8"
+            className="underline underline-offset-8 hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
           >
             photographer
           </a>

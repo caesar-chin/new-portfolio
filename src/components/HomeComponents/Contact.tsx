@@ -4,9 +4,7 @@ export default function Contact() {
   const [success, setSuccess] = React.useState(false);
   const [button, setButton] = React.useState(false);
 
-  function test() {
-    alert("test");
-  }
+
 
   const sendEmail = async (e: any) => {
     e.preventDefault();
@@ -38,7 +36,7 @@ export default function Contact() {
 
   return (
     <div>
-      <div className="text-4xl my-7">
+      <div className="my-7 text-4xl">
         Contact me if you have any questions or want to collaborate on a
         project!
       </div>
@@ -47,7 +45,7 @@ export default function Contact() {
           Your Name<p className="text-red">*</p>
         </label>
         <input
-          className="dark:bg-darkish-cyan bg-white text:black dark:text-white text-3xl border-b-half border-faded-grey mb-4"
+          className="text:black mb-4 border-b-half border-faded-grey bg-white text-3xl dark:bg-darkish-cyan dark:text-white"
           type="text"
           name="name"
           required
@@ -57,7 +55,7 @@ export default function Contact() {
           Your Email<p className="text-red">*</p>
         </label>
         <input
-          className="dark:bg-darkish-cyan bg-white text:black dark:text-white text-3xl border-b-half border-faded-grey mb-4"
+          className="text:black mb-4 border-b-half border-faded-grey bg-white text-3xl dark:bg-darkish-cyan dark:text-white"
           type="email"
           name="email"
           required
@@ -67,13 +65,13 @@ export default function Contact() {
           Message<p className="text-red">*</p>
         </label>
         <textarea
-          className="dark:bg-darkish-cyan bg-white text:black dark:text-white text-3xl border-b-half border-faded-grey mb-4"
+          className="text:black mb-4 border-b-half border-faded-grey bg-white text-3xl dark:bg-darkish-cyan dark:text-white"
           name="message"
           required
           placeholder="Hi! I'm interested in working with you on a project."
         />
         <button
-          className="mt-4 text-2xl w-28 text-center rounded-full leading-10 border-[2px] border-sea-foam-green hover:bg-sea-foam-green dark:border-dark-grayish-red dark:hover:bg-dark-grayish-red"
+          className="mt-4 w-28 rounded-full border-[2px] border-sea-foam-green text-center text-2xl leading-10 hover:bg-sea-foam-green dark:border-dark-grayish-red dark:hover:bg-dark-grayish-red"
           type="submit"
         >
           Send

@@ -225,16 +225,16 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
 
   return (
     <div className="h-full">
-      <ScrollToTop className="dark:bg-dark-grayish-red bg-sea-foam-green flex flex-row justify-center items-center shadow-none rounded-full" />
+      <ScrollToTop className="flex flex-row items-center justify-center rounded-full bg-sea-foam-green shadow-none dark:bg-dark-grayish-red" />
 
       {title === "streetlandscape" ? (
-        <div className="text-4xl whitespace-pre uppercase tracking-widest flex justify-center mb-12">
+        <div className="mb-12 flex justify-center whitespace-pre text-4xl uppercase tracking-widest">
           <div>Street</div>
           <div> & </div>
           <div>Landscape</div>
         </div>
       ) : (
-        <div className="text-5xl uppercase tracking-widest flex justify-center mb-12">
+        <div className="mb-12 flex justify-center text-5xl uppercase tracking-widest">
           Concert
         </div>
       )}
@@ -243,16 +243,16 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
         <button className="cursor-pointer" onClick={handleExpanded}>
           <FontAwesomeIcon
             icon={faBars}
-            className={`dark:hover:!text-dark-grayish-red hover:!text-sea-foam-green text-3xl ${
-              expanded && "dark:!text-dark-grayish-red !text-sea-foam-green"
+            className={`text-3xl hover:!text-sea-foam-green dark:hover:!text-dark-grayish-red ${
+              expanded && "!text-sea-foam-green dark:!text-dark-grayish-red"
             }`}
           />
         </button>
-        <div className="flex flex-row justify-between items-center">
+        <div className="flex flex-row items-center justify-between">
           <FontAwesomeIcon
             icon={faImage}
             onClick={minResize}
-            className="dark:hover:!text-dark-grayish-red hover:!text-sea-foam-green cursor-pointer text-lg"
+            className="cursor-pointer text-lg hover:!text-sea-foam-green dark:hover:!text-dark-grayish-red"
           />
 
           <Slider
@@ -262,12 +262,12 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
             aria-label="resize"
             min={30}
             max={100}
-            className="dark:!text-dark-grayish-red !text-sea-foam-green"
+            className="!text-sea-foam-green dark:!text-dark-grayish-red"
           />
 
           <FontAwesomeIcon
             icon={faImage}
-            className="dark:hover:!text-dark-grayish-red hover:!text-sea-foam-green cursor-pointer text-3xl"
+            className="cursor-pointer text-3xl hover:!text-sea-foam-green dark:hover:!text-dark-grayish-red"
             onClick={maxResize}
           />
         </div>
@@ -276,12 +276,12 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
       <div
         id="expanded-menu"
         className={`${
-          expanded ? "opacity-100 visible h-auto" : "opacity-0 invisible h-0"
-        } mt-4 w-auto py-2 bg-white rounded shadow-md transition-all duration-200 ease-in border-[2px] border-black border-solid rounded text-black`}
+          expanded ? "visible h-auto opacity-100" : "invisible h-0 opacity-0"
+        } mt-4 w-auto rounded  border-[2px] border-solid border-black bg-white py-2 text-black shadow-md transition-all duration-200 ease-in`}
       >
         <div
           className={`${
-            expanded ? "opacity-100 visible h-auto" : "opacity-0 invisible h-0"
+            expanded ? "visible h-auto opacity-100" : "invisible h-0 opacity-0"
           } text-black`}
         >
           <FilterMenu
@@ -294,15 +294,15 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
 
       <div>
         <div
-          className={`flex flex-col items-center justify-center mt-24 transition-all duration-1500 animate-pulse 
-            ${loading ? "opacity-100 block" : "opacity-0 hidden"}
+          className={`mt-24 flex animate-pulse flex-col items-center justify-center transition-all duration-1500 
+            ${loading ? "block opacity-100" : "hidden opacity-0"}
             `}
         >
           {/* Loader */}
 
-          <div className="flex items-center justify-center space-x-2 animate-pulse">
+          <div className="flex animate-pulse items-center justify-center space-x-2">
             <div
-              className="inline-block h-24 w-24 animate-spin rounded-full border-4 border-solid dark:border-dark-grayish-red border-black border-r-transparent dark:border-r-transparent align-[-0.125em] text-primary motion-reduce:animate-[spin_1.5s_linear_infinite]"
+              className="text-primary inline-block h-24 w-24 animate-spin rounded-full border-4 border-solid border-black border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite] dark:border-dark-grayish-red dark:border-r-transparent"
               role="status"
             >
               <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
@@ -314,7 +314,7 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
 
         <div
           className={`${
-            loading ? "opacity-0 invisible" : "opacity-100 visible"
+            loading ? "invisible opacity-0" : "visible opacity-100"
           } transition-all duration-1500`}
         >
           {loadedImages.map((occasion_key: React.Key, index: any) => {
@@ -342,26 +342,26 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
 
             return (
               <div key={index} className={`${loading ? "hidden" : "block"}`}>
-                <div className="mt-8 flex flex-row w-auto justify-between items-center">
-                  <div className="flex flex-row w-auto whitespace-pre items-center ml-4">
+                <div className="mt-8 flex w-auto flex-row items-center justify-between">
+                  <div className="ml-4 flex w-auto flex-row items-center whitespace-pre">
                     <div className="flex flex-row max-md:flex-col ">
-                      <div className="uppercase text-lg">
+                      <div className="text-lg uppercase">
                         {occasion_name_parts[0]}
                       </div>
-                      <div className="uppercase text-lg max-md:hidden">
+                      <div className="text-lg uppercase max-md:hidden">
                         {", "}
                       </div>
-                      <div className="uppercase text-lg">
+                      <div className="text-lg uppercase">
                         {occasion_name_parts[1]}
                       </div>
                     </div>
                   </div>
 
-                  <div className="ml-4 flex flex-row w-full items-center before:flex-auto before:border-half before:content-[''] border-white before:mr-4 ">
+                  <div className="ml-4 flex w-full flex-row items-center border-white before:mr-4 before:flex-auto before:border-half before:content-[''] ">
                     <div className="relative ">
                       {clickedStates[index] ? (
-                        <div className="cursor-pointer flex flex-row items-center transition-opacity duration-500 transition-visibility visible opacity-100 ease-in-out opacity-100 ease-in-out">
-                          <div className="mr-2 max-md:hidden text-md">
+                        <div className="transition-visibility visible flex cursor-pointer flex-row items-center opacity-100 transition-opacity duration-500 ease-in-out">
+                          <div className="text-md mr-2 max-md:hidden">
                             THANK YOU
                           </div>
                           <FontAwesomeIcon
@@ -371,12 +371,12 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
                         </div>
                       ) : (
                         <div
-                          className="cursor-pointer flex flex-row items-center transition-opacity duration-500 transition-visibility visible opacity-100 ease-in-out"
+                          className="transition-visibility visible flex cursor-pointer flex-row items-center opacity-100 transition-opacity duration-500 ease-in-out"
                           onClick={() =>
                             downloadZipFile(Object.keys(occasion_key)[0], index)
                           }
                         >
-                          <div className="mr-2 max-md:hidden text-md">
+                          <div className="text-md mr-2 max-md:hidden">
                             DOWNLOAD COLLECTION
                           </div>
                           <FontAwesomeIcon
@@ -413,7 +413,7 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
         ) : unloadedImages.length > 0 && initialLoad ? (
           <div className="mt-8 mb-8 text-center">
             <div
-              className="text-2xl mt-4 dark:hover:!text-dark-grayish-red hover:!text-sea-foam-green cursor-pointer"
+              className="mt-4 cursor-pointer text-2xl hover:!text-sea-foam-green dark:hover:!text-dark-grayish-red"
               onClick={loadMorePhotos}
             >
               LOAD MORE
