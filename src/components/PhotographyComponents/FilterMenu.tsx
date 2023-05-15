@@ -15,18 +15,12 @@ export default function FilterMenu({
   handleCustomLoadedImages,
   loading,
 }: FilterMenuType) {
+  // Declare state variables
   const [selectedOccasions, setSelectedOccasions] = React.useState({});
   const [searchTerm, setSearchTerm] = React.useState("");
   const [searchInputValue, setSearchInputValue] = React.useState("");
 
-  // React.useEffect(() => {
-  //   console.log(selectedOccasions);
-  // }, [selectedOccasions]);
-
-  // React.useEffect(() => {
-  //   console.log(occasionList);
-  // }, [occasionList]);
-
+  // Initialize selectedOccasions with occasionList keys
   React.useEffect(() => {
     const initialState = Object.keys(occasionList).reduce((acc, occasion) => {
       acc[occasion] = false;
@@ -35,12 +29,7 @@ export default function FilterMenu({
     setSelectedOccasions(initialState);
   }, [occasionList]);
 
-  // React.useEffect(() => {
-  //   if (Object.keys(selectedOccasions).length > 0) {
-  //     console.log(selectedOccasions);
-  //   }
-  // }, [selectedOccasions]);
-
+  // Function to sort objects by values
   const sortObjectByValues = (
     obj: { [s: string]: unknown } | ArrayLike<unknown>
   ) => {
@@ -51,6 +40,7 @@ export default function FilterMenu({
     return Object.fromEntries(sortedEntries);
   };
 
+  // Handle checkbox state change
   const handleCheckboxChange = (occasion: string) => {
     setSelectedOccasions((prevState) => {
       // Update the state
@@ -66,6 +56,7 @@ export default function FilterMenu({
     });
   };
 
+  // Reset all checkboxes and search term
   const setAllCheckboxToFalse = () => {
     const initialState = Object.keys(occasionList).reduce((acc, occasion) => {
       acc[occasion] = false;
@@ -75,6 +66,7 @@ export default function FilterMenu({
     setSearchTerm("");
   };
 
+  // Handle mouse events for checkboxes
   const handleMouseEnter = (e: React.MouseEvent<HTMLInputElement>) => {
     const nextSibling = (e.target as HTMLElement).nextSibling;
     if (nextSibling) {
@@ -89,16 +81,14 @@ export default function FilterMenu({
     }
   };
 
+  // Convert occasionList to array of objects
   const occasionListOfObjects = Object.entries(occasionList).map(
     ([key, value], index) => {
       return { [key]: value, originalIndex: index };
     }
   );
 
-  // React.useEffect(() => {
-  //   console.log(occasionListOfObjects);
-  // }, [occasionListOfObjects]);
-
+  // Apply selected occasions when Apply button is clicked
   const handleApplyButton = () => {
     const trueValuesObject = Object.entries(selectedOccasions).reduce(
       (accumulator, [key, value]) => {
@@ -113,16 +103,19 @@ export default function FilterMenu({
     handleCustomLoadedImages(trueValuesObject);
   };
 
+  // Handle search input value and search term changes
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInputValue(e.target.value);
     setSearchTerm(e.target.value);
   };
 
+  // Clear search input and search term
   const clearSearch = () => {
     setSearchInputValue("");
     setSearchTerm("");
   };
 
+  // Filter and sort occasion list based on selected occasions and search term
   const filteredAndSortedOccasionListOfObjects = occasionListOfObjects
     .map((occasion, index) => ({ ...occasion, originalIndex: index }))
     .filter((occasion) => {
@@ -142,17 +135,18 @@ export default function FilterMenu({
 
       return false;
     })
-    .sort((a, b) => {
-      const aKey = Object.keys(a)[0];
-      const bKey = Object.keys(b)[0];
-      const aValue = selectedOccasions[aKey];
-      const bValue = selectedOccasions[bKey];
+    // This will sort and bring the sorted items to the front of the list
+    // .sort((a, b) => {
+    //   const aKey = Object.keys(a)[0];
+    //   const bKey = Object.keys(b)[0];
+    //   const aValue = selectedOccasions[aKey];
+    //   const bValue = selectedOccasions[bKey];
 
-      if (aValue === bValue) {
-        return a.originalIndex - b.originalIndex;
-      }
-      return aValue ? -1 : 1;
-    })
+    //   if (aValue === bValue) {
+    //     return a.originalIndex - b.originalIndex;
+    //   }
+    //   return aValue ? -1 : 1;
+    // })
     .map(({ originalIndex, ...rest }) => rest);
 
   return (

@@ -185,7 +185,7 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
         new_loaded_images.push({
           [occasions_keys]: imagesList[occasions_keys],
         });
-      console.log(new_loaded_images);
+
       setLoadedImages(new_loaded_images);
       setInitialLoad(false);
 
