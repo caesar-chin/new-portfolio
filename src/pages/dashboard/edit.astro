@@ -1,7 +1,8 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import Login from "../../components/DashboardComponents/Login";
-import Edit from "../../components/DashboardComponents/Edit";
+import EditNavbar from "../../components/DashboardComponents/EditNavbar";
+import EditingParent from "../../components/DashboardComponents/EditingParent";
 export const prerender = true;
 
 let darkMode = localStorage.getItem("color-theme") === "dark" ? true : false;
@@ -16,8 +17,8 @@ let darkMode = localStorage.getItem("color-theme") === "dark" ? true : false;
       <div class="mx-12 flex min-h-screen flex-col items-center pt-2">
         <div id="home" class="min-h-screen w-full">
           <div class="m-h-full">
-            <!-- <Login darkMode={darkMode} client:load /> -->
-            <Edit darkMode={darkMode} client:load />
+            <EditNavbar darkMode={darkMode} client:load />
+            <EditingParent />
           </div>
         </div>
       </div>

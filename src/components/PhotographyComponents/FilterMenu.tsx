@@ -198,7 +198,7 @@ export default function FilterMenu({
                     />
                   )}
                   <label
-                    className="ml-2 py-2 text-lg text-sm text-black hover:!text-sea-foam-green dark:hover:!text-dark-grayish-red"
+                    className="ml-2 py-2  text-sm text-black hover:!text-sea-foam-green dark:hover:!text-dark-grayish-red"
                     onClick={() =>
                       handleCheckboxChange(Object.keys(occasion)[0])
                     }

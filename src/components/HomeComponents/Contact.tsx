@@ -4,8 +4,6 @@ export default function Contact() {
   const [success, setSuccess] = React.useState(false);
   const [button, setButton] = React.useState(false);
 
-
-
   const sendEmail = async (e: any) => {
     e.preventDefault();
 
@@ -41,7 +39,7 @@ export default function Contact() {
         project!
       </div>
       <form className="flex flex-col" onSubmit={sendEmail}>
-        <label className="mt-4 mb-2 flex flex-row font-murecho">
+        <label className="mb-2 mt-4 flex flex-row font-murecho">
           Your Name<p className="text-red">*</p>
         </label>
         <input
@@ -51,7 +49,7 @@ export default function Contact() {
           required
           placeholder="John Doe"
         />
-        <label className="mt-4 mb-2 flex flex-row font-murecho">
+        <label className="mb-2 mt-4 flex flex-row font-murecho">
           Your Email<p className="text-red">*</p>
         </label>
         <input
@@ -61,7 +59,7 @@ export default function Contact() {
           required
           placeholder="johndoe@gmail.com"
         />
-        <label className="mt-4 mb-2  flex flex-row font-murecho">
+        <label className="mb-2 mt-4  flex flex-row font-murecho">
           Message<p className="text-red">*</p>
         </label>
         <textarea
