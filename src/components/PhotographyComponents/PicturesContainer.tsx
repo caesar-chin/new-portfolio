@@ -174,7 +174,7 @@ export default function PicturesContainer({
               <img
                 src={fullscreenImage}
                 alt="Fullscreen"
-                className="fullscreen-image absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform"
+                className="fullscreen-image absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform"
                 style={{ maxWidth: "100%", maxHeight: "100%" }}
                 onClick={handleContentClick}
                 draggable={false}
@@ -182,7 +182,7 @@ export default function PicturesContainer({
             </div>
 
             <button
-              className="absolute top-0 right-0 m-4 text-gray-800 focus:outline-none"
+              className="absolute right-0 top-0 m-4 text-gray-800 focus:outline-none"
               onClick={toggleFullscreen}
             >
               <FontAwesomeIcon

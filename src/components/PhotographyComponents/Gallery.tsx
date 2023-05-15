@@ -411,7 +411,7 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
         {loading ? (
           <div></div>
         ) : unloadedImages.length > 0 && initialLoad ? (
-          <div className="mt-8 mb-8 text-center">
+          <div className="mb-8 mt-8 text-center">
             <div
               className="mt-4 cursor-pointer text-2xl hover:!text-sea-foam-green dark:hover:!text-dark-grayish-red"
               onClick={loadMorePhotos}

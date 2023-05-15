@@ -115,6 +115,14 @@ export default function PhotoNavbar({ darkMode, title }: PhotoNavbarProps) {
         >
           Instagram
         </a>
+
+        <a
+          href="/dashboard"
+          className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+        >
+          Dashboard
+        </a>
+
         <DarkModeButton darkMode={darkMode} />
       </div>
 
