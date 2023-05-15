@@ -1,0 +1,46 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Login from "../../components/DashboardComponents/Login";
+import Edit from "../../components/DashboardComponents/Edit";
+export const prerender = true;
+
+let darkMode = localStorage.getItem("color-theme") === "dark" ? true : false;
+---
+
+<div
+  class="bg-white text-black dark:bg-darkish-cyan dark:text-white"
+  id="background"
+>
+  <Layout title="Photography Dashboard">
+    <div class="container mx-auto">
+      <div class="mx-12 flex min-h-screen flex-col items-center pt-2">
+        <div id="home" class="min-h-screen w-full">
+          <div class="m-h-full">
+            <!-- <Login darkMode={darkMode} client:load /> -->
+            <Edit darkMode={darkMode} client:load />
+          </div>
+        </div>
+      </div>
+    </div>
+  </Layout>
+</div>
+
+<style>
+  #projects,
+  #contact,
+  #home,
+  #footer {
+    animation: fadeInAnimation ease 1s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes fadeInAnimation {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+</style>
