@@ -16,14 +16,18 @@ export default function Edit({ darkMode }: EditProps) {
       .then((res) => {
         if (res.status >= 400) {
           console.log("Log in to GitHub again");
-          window.location.href = `${import.meta.env.HOMEPAGE_URL}/dashboard`;
+          window.location.href = `${
+            import.meta.env.PUBLIC_HOMEPAGE_URL
+          }/dashboard`;
         } else {
           console.log("Authenticated");
         }
       })
       .catch((err) => {
         console.log(err);
-        window.location.href = `${import.meta.env.HOMEPAGE_URL}/dashboard`;
+        window.location.href = `${
+          import.meta.env.PUBLIC_HOMEPAGE_URL
+        }/dashboard`;
       });
   };
 
