@@ -78,7 +78,7 @@ export default function PhotoNavbar({ darkMode, title }: PhotoNavbarProps) {
         </div>
       </div>
 
-      <div className="flex flex-col">
+      <div className="flex flex-col text-right">
         {/* <a
           href="/about"
           className="hover:text-sea-foam-green dark:hover:text-dark-grayish-red"

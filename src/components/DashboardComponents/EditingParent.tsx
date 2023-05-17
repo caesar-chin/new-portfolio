@@ -24,6 +24,13 @@ export default function EditingParent() {
     photo: "",
     details: false,
   });
+  const [selectedListName, setSelectedListName] =
+    React.useState<SelectedListType>({
+      type: "",
+      occasion: "",
+      photo: "",
+      details: false,
+    });
   const [masterList, setMasterList] = React.useState({});
   const [isLoaded, setIsLoaded] = React.useState(false);
   const [photoType, setPhotoType] = React.useState([
@@ -74,6 +81,15 @@ export default function EditingParent() {
         return newState;
       });
 
+      setSelectedListName((prevState) => {
+        const newState = { ...prevState };
+        newState.type = photoType[index].name;
+        newState.occasion = "";
+        newState.photo = "";
+        newState.details = false;
+        return newState;
+      });
+
       setOccasionList([]);
       setPhotosList([]);
       setDetails({});
@@ -104,11 +120,24 @@ export default function EditingParent() {
     setOccasionList(index_list);
   };
 
-  const handleOccasionSelect = (occasion_obj_key: string) => {
+  const handleOccasionSelect = (
+    occasion_obj_key: string,
+    occasion_name: string
+  ) => {
     if (occasion_obj_key !== selectedList.occasion) {
       setSelectedList((prevState) => {
         const newState = { ...prevState };
         newState.occasion = occasion_obj_key;
+        newState.photo = "";
+        newState.details = false;
+        return newState;
+      });
+
+      console.log(occasionList);
+
+      setSelectedListName((prevState) => {
+        const newState = { ...prevState };
+        newState.occasion = occasion_name;
         newState.photo = "";
         newState.details = false;
         return newState;
@@ -151,6 +180,13 @@ export default function EditingParent() {
         return newState;
       });
 
+      setSelectedListName((prevState) => {
+        const newState = { ...prevState };
+        newState.photo = photo_obj_key;
+        newState.details = false;
+        return newState;
+      });
+
       setDetails({});
     }
 
@@ -182,6 +218,49 @@ export default function EditingParent() {
     });
   };
 
+  const handleSelectedListForPhotoType = () => {
+    setSelectedList((prevState) => {
+      const newState = { ...prevState };
+      newState.occasion = "";
+      newState.photo = "";
+      newState.details = false;
+      return newState;
+    });
+
+    setSelectedListName((prevState) => {
+      const newState = { ...prevState };
+      newState.occasion = "";
+      newState.photo = "";
+      newState.details = false;
+      return newState;
+    });
+
+    setOccasionList([]);
+    setPhotosList([]);
+    setDetails({});
+  };
+
+  const handleSelectedListForOccasion = () => {
+    setSelectedList((prevState) => {
+      const newState = { ...prevState };
+      newState.photo = "";
+      newState.details = false;
+      return newState;
+    });
+
+    console.log(occasionList);
+
+    setSelectedListName((prevState) => {
+      const newState = { ...prevState };
+      newState.photo = "";
+      newState.details = false;
+      return newState;
+    });
+
+    setPhotosList([]);
+    setDetails({});
+  };
+
   // React.useEffect(() => {
   //   console.log(occasionList);
   // }, [occasionList]);
@@ -190,116 +269,137 @@ export default function EditingParent() {
   //   console.log(selectedList);
   // }, [selectedList]);
 
-  React.useEffect(() => {
-    console.log(masterList);
-  }, [masterList]);
-
   if (!isLoaded) return <div className="mt-4">Loading...</div>;
 
   return (
-    <div className="mt-4 flex flex-row overflow-x-scroll ">
-      <div className="flex flex-col items-stretch">
-        {photoType.map((type, index) => {
-          return (
+    <div className="">
+      <div className="flex h-8 flex-row">
+        {selectedListName.type && (
+          <div className="flex flex-row ">
             <div
-              key={index}
-              className={`${
-                type.selected &&
-                "text-sea-foam-green dark:text-dark-grayish-red"
-              } flex cursor-pointer flex-row items-center justify-between hover:text-sea-foam-green dark:hover:text-dark-grayish-red`}
-              onClick={() => handlePhotoTypeSelect(index)}
-            >
-              <div className={`mr-4 text-lg`}>{type.name}</div>
-              <div className="w-4">
-                <FontAwesomeIcon
-                  icon={faGreaterThan}
-                  className={`${!type.selected && "hidden"} text-sm`}
-                />
-              </div>
-            </div>
-          );
-        })}
+              onClick={handleSelectedListForPhotoType}
+              className="cursor-pointer hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+            >{`${selectedListName.type}`}</div>
+            <div className="px-2">/</div>
+          </div>
+        )}
+        {selectedListName.occasion && (
+          <div className="flex flex-row">
+            <div
+              onClick={handleSelectedListForOccasion}
+              className="cursor-pointer hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+            >{`${selectedListName.occasion}`}</div>
+            <div className="px-2">/</div>
+          </div>
+        )}
+        {
+          <div className="cursor-pointer hover:text-sea-foam-green dark:hover:text-dark-grayish-red">
+            {selectedListName.photo}
+          </div>
+        }
       </div>
 
-      <div className="ml-4 flex flex-col items-stretch">
-        {occasionList.map((occasion, index) => {
-          var occasion_obj_key = Object.keys(occasion)[0];
-          var occasion_name = occasion[occasion_obj_key];
-          var occasion_selected = occasion[Object.keys(occasion)[1]];
-          return (
-            <div
-              key={index}
-              className={`${
-                occasion_selected &&
-                "text-sea-foam-green dark:text-dark-grayish-red"
-              } flex cursor-pointer flex-row items-center justify-between hover:text-sea-foam-green dark:hover:text-dark-grayish-red`}
-              onClick={() => {
-                handleOccasionSelect(occasion_obj_key);
-              }}
-            >
-              <div className={`mr-4 text-lg`}>{occasion_name}</div>
-
-              <div className="w-4">
-                <FontAwesomeIcon
-                  icon={faGreaterThan}
-                  className={`${!occasion_selected && "hidden"} text-sm`}
-                />
+      <div className="mt-2 flex flex-row overflow-x-scroll ">
+        {/* Photo Type */}
+        <div className="flex flex-col items-stretch">
+          {photoType.map((type, index) => {
+            return (
+              <div
+                key={index}
+                className={`${
+                  type.selected &&
+                  "text-sea-foam-green dark:text-dark-grayish-red"
+                } flex cursor-pointer flex-row items-center justify-between hover:text-sea-foam-green dark:hover:text-dark-grayish-red`}
+                onClick={() => handlePhotoTypeSelect(index)}
+              >
+                <div className={`mr-4 text-lg`}>{type.name}</div>
+                <div className="w-4">
+                  <FontAwesomeIcon
+                    icon={faGreaterThan}
+                    className={`${!type.selected && "hidden"} text-sm`}
+                  />
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
-
-      <div className="ml-4 flex flex-col items-stretch">
-        {photosList.map((photo, index) => {
-          var photo_name = Object.keys(photo)[0];
-          var photo_details = photo[photo_name];
-          var photo_selected = photo["selected"];
-
-          return (
-            <div
-              key={index}
-              className={`${
-                photo_selected &&
-                "text-sea-foam-green dark:text-dark-grayish-red"
-              } flex cursor-pointer flex-row items-center justify-between hover:text-sea-foam-green dark:hover:text-dark-grayish-red`}
-              onClick={() => {
-                handlePhotoSelect(photo_name, photo_details);
-              }}
-            >
-              <div className={`mr-4 text-lg`}>{photo_name}</div>
-
-              <div className="w-4">
-                <FontAwesomeIcon
-                  icon={faGreaterThan}
-                  className={`${!photo_selected && "hidden"} text-sm`}
-                />
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      <div className={`${!selectedList.details && "hidden"}`}>
-        <div className="w-64">
-          <img
-            src={details["webp_url"]}
-            alt={details["caption"]}
-            className="h-full w-full"
-          />
+            );
+          })}
         </div>
 
-        <div>Caption: {details["caption"]}</div>
-        <div>Date: {details["date"]}</div>
-        {/* <div>{details["url"]}</div> */}
-        {selectedList.type === "concert" ? (
-          <div>
-            <div>Artist: {details["artist"]}</div>
-            <div>Venue: {details["venue"]}</div>
+        {/* Occasions */}
+        <div className="ml-4 flex flex-col items-stretch">
+          {occasionList.map((occasion, index) => {
+            var occasion_obj_key = Object.keys(occasion)[0];
+            var occasion_name = occasion[occasion_obj_key];
+            var occasion_selected = occasion[Object.keys(occasion)[1]];
+            return (
+              <div
+                key={index}
+                className={`${
+                  occasion_selected &&
+                  "text-sea-foam-green dark:text-dark-grayish-red"
+                } flex cursor-pointer flex-row items-center justify-between hover:text-sea-foam-green dark:hover:text-dark-grayish-red`}
+                onClick={() => {
+                  handleOccasionSelect(occasion_obj_key, occasion_name);
+                }}
+              >
+                <div className={`mr-4 text-lg`}>{occasion_name}</div>
+
+                <div className="w-4">
+                  <FontAwesomeIcon
+                    icon={faGreaterThan}
+                    className={`${!occasion_selected && "hidden"} text-sm`}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Photos */}
+        <div className="ml-4 flex flex-col items-stretch">
+          {photosList.map((photo, index) => {
+            var photo_name = Object.keys(photo)[0];
+            var photo_details = photo[photo_name];
+            var photo_selected = photo["selected"];
+
+            return (
+              <div
+                key={index}
+                className={`${
+                  photo_selected &&
+                  "text-sea-foam-green dark:text-dark-grayish-red"
+                } flex cursor-pointer flex-row items-center justify-between hover:text-sea-foam-green dark:hover:text-dark-grayish-red`}
+                onClick={() => {
+                  handlePhotoSelect(photo_name, photo_details);
+                }}
+              >
+                <div className={`mr-4 text-lg`}>{photo_name}</div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Photo Details */}
+        <div className={`${!selectedList.details && "hidden"} ml-4`}>
+          <div className="w-64">
+            <img
+              src={details["webp_url"]}
+              alt={details["caption"]}
+              className="h-full w-full"
+            />
           </div>
-        ) : (
-          <div>Place: {details["venue"]}</div>
-        )}
+
+          <div>Caption: {details["caption"]}</div>
+          <div>Date: {details["date"]}</div>
+          {/* <div>{details["url"]}</div> */}
+          {selectedList.type === "concert" ? (
+            <div>
+              <div>Artist: {details["artist"]}</div>
+              <div>Venue: {details["venue"]}</div>
+            </div>
+          ) : (
+            <div>Place: {details["venue"]}</div>
+          )}
+        </div>
       </div>
     </div>
   );

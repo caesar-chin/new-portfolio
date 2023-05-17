@@ -102,7 +102,7 @@ export default function Edit({ darkMode }: EditProps) {
         </div>
       </div>
 
-      <div className="flex flex-col">
+      <div className="flex flex-col text-right">
         {darkModeState ? (
           <a
             className="cursor-pointer hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
