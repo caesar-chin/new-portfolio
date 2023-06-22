@@ -1,6 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGreaterThan } from "@fortawesome/free-solid-svg-icons";
+import AddingNewListItem from "./AddingNewListItem";
 
 type OccasionDetails = {
   [key: string]: string;
@@ -40,11 +41,16 @@ export default function EditingParent() {
   const [occasionList, setOccasionList] = React.useState<OccasionType[]>([]);
   const [photosList, setPhotosList] = React.useState([]);
   const [details, setDetails] = React.useState({});
+  const [previousType, setPreviousType] = React.useState(null);
 
   const photoTypeKeys = ["concert", "streetlandscape"];
 
   React.useEffect(() => {
-    // Fetches concert JSON
+    // Update the previousType state whenever selectedListName.type changes
+    setPreviousType(selectedListName.type);
+  }, [selectedListName.type]);
+
+  const downloadJsonFiles = async () => {
     const fetchData = async () => {
       await fetch(`${import.meta.env.PUBLIC_API_URL}/get_index_and_key_json`, {
         method: "GET",
@@ -63,11 +69,25 @@ export default function EditingParent() {
     fetchData().then(() => {
       setIsLoaded(true);
     });
+  };
+
+  React.useEffect(() => {
+    const fetchDataAndSetLoaded = async () => {
+      // Fetches concert JSON
+      await downloadJsonFiles();
+      setIsLoaded(true);
+    };
+
+    fetchDataAndSetLoaded();
   }, []);
 
   // React.useEffect(() => {
   //   console.log(Object.keys(masterList));
   // }, [masterList]);
+
+  React.useEffect(() => {
+    console.log(occasionList);
+  }, [occasionList]);
 
   //Photo type is selected and shows the respected occasions
   const handlePhotoTypeSelect = (index: number) => {
@@ -91,6 +111,7 @@ export default function EditingParent() {
       });
 
       setOccasionList([]);
+
       setPhotosList([]);
       setDetails({});
     }
@@ -272,10 +293,10 @@ export default function EditingParent() {
   if (!isLoaded) return <div className="mt-4">Loading...</div>;
 
   return (
-    <div className="">
-      <div className="flex h-8 flex-row">
+    <div className="overflow-x-auto">
+      <div className="flex h-8 flex-row overflow-x-auto">
         {selectedListName.type && (
-          <div className="flex flex-row ">
+          <div className="flex w-auto flex-row">
             <div
               onClick={handleSelectedListForPhotoType}
               className="cursor-pointer hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
@@ -284,7 +305,7 @@ export default function EditingParent() {
           </div>
         )}
         {selectedListName.occasion && (
-          <div className="flex flex-row">
+          <div className="flex flex-row ">
             <div
               onClick={handleSelectedListForOccasion}
               className="cursor-pointer hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
@@ -299,7 +320,7 @@ export default function EditingParent() {
         }
       </div>
 
-      <div className="mt-2 flex flex-row overflow-x-scroll ">
+      <div className="mt-2 flex flex-row ">
         {/* Photo Type */}
         <div className="flex flex-col items-stretch">
           {photoType.map((type, index) => {
@@ -309,7 +330,7 @@ export default function EditingParent() {
                 className={`${
                   type.selected &&
                   "text-sea-foam-green dark:text-dark-grayish-red"
-                } flex cursor-pointer flex-row items-center justify-between hover:text-sea-foam-green dark:hover:text-dark-grayish-red`}
+                } mb-1 flex cursor-pointer flex-row items-center justify-between hover:text-sea-foam-green dark:hover:text-dark-grayish-red`}
                 onClick={() => handlePhotoTypeSelect(index)}
               >
                 <div className={`mr-4 text-lg`}>{type.name}</div>
@@ -336,7 +357,7 @@ export default function EditingParent() {
                 className={`${
                   occasion_selected &&
                   "text-sea-foam-green dark:text-dark-grayish-red"
-                } flex cursor-pointer flex-row items-center justify-between hover:text-sea-foam-green dark:hover:text-dark-grayish-red`}
+                } mb-1 flex cursor-pointer flex-row items-center justify-between hover:text-sea-foam-green dark:hover:text-dark-grayish-red`}
                 onClick={() => {
                   handleOccasionSelect(occasion_obj_key, occasion_name);
                 }}
@@ -352,6 +373,14 @@ export default function EditingParent() {
               </div>
             );
           })}
+          {occasionList.length > 0 &&
+            selectedListName.type === previousType && (
+              <AddingNewListItem
+                typeName={selectedListName.type}
+                occasionBool={true}
+                downloadJsonFiles={downloadJsonFiles}
+              />
+            )}
         </div>
 
         {/* Photos */}
@@ -367,7 +396,7 @@ export default function EditingParent() {
                 className={`${
                   photo_selected &&
                   "text-sea-foam-green dark:text-dark-grayish-red"
-                } flex cursor-pointer flex-row items-center justify-between hover:text-sea-foam-green dark:hover:text-dark-grayish-red`}
+                } mb-1 flex cursor-pointer flex-row items-center justify-between hover:text-sea-foam-green dark:hover:text-dark-grayish-red`}
                 onClick={() => {
                   handlePhotoSelect(photo_name, photo_details);
                 }}
@@ -380,7 +409,7 @@ export default function EditingParent() {
 
         {/* Photo Details */}
         <div className={`${!selectedList.details && "hidden"} ml-4`}>
-          <div className="w-64">
+          <div className="w-80">
             <img
               src={details["webp_url"]}
               alt={details["caption"]}
