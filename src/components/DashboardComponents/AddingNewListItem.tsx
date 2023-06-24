@@ -8,6 +8,7 @@ interface AddingNewListItemProps {
   occasionBool: boolean;
   occasionName?: string;
   downloadJsonFiles?: () => void;
+  selectNewOccasion?: (occasion_name: string, occasion_obj_key: string) => void;
 }
 
 export default function AddingNewListItem({
@@ -15,6 +16,7 @@ export default function AddingNewListItem({
   occasionBool,
   occasionName,
   downloadJsonFiles,
+  selectNewOccasion,
 }: AddingNewListItemProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -38,14 +40,19 @@ export default function AddingNewListItem({
           type: typeName.toLowerCase(),
           occasion: inputRef.current?.value,
         }),
-      }).then((res) => {
-        if (res.status >= 400) {
-          console.log("Error adding new occasion");
-        } else {
-          downloadJsonFiles();
-          handleAdding(false);
-        }
-      });
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.status >= 400) {
+            console.log("Error adding new occasion");
+          } else {
+            console.log(res);
+            selectNewOccasion(res.occasion_name, res.occasion_key);
+            console.log("Successfully added new occasion");
+            downloadJsonFiles();
+            handleAdding(false);
+          }
+        });
     }
   };
 
@@ -59,7 +66,6 @@ export default function AddingNewListItem({
 
   return (
     <div>
-      <div onClick={() =>downloadJsonFiles()}>Reload</div>
       {addingNew && (
         <div>
           <form onSubmit={handleSubmitNewItem}>
