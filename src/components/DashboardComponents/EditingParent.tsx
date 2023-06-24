@@ -1,7 +1,11 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGreaterThan } from "@fortawesome/free-solid-svg-icons";
+import {
+  faGreaterThan,
+  faArrowsRotate,
+} from "@fortawesome/free-solid-svg-icons";
 import AddingNewListItem from "./AddingNewListItem";
+import PhotoList from "./PhotoList";
 
 type OccasionDetails = {
   [key: string]: string;
@@ -12,7 +16,7 @@ type OccasionType = OccasionDetails & {
 };
 
 type SelectedListType = {
-  type: number | string;
+  type: any;
   occasion: string;
   photo: string;
   details: boolean;
@@ -42,6 +46,7 @@ export default function EditingParent() {
   const [photosList, setPhotosList] = React.useState([]);
   const [details, setDetails] = React.useState({});
   const [previousType, setPreviousType] = React.useState(null);
+  const [listAcceptedFiles, setListAcceptedFiles] = React.useState([]);
 
   const photoTypeKeys = ["concert", "streetlandscape"];
 
@@ -50,47 +55,106 @@ export default function EditingParent() {
     setPreviousType(selectedListName.type);
   }, [selectedListName.type]);
 
-  const downloadJsonFiles = async () => {
-    const fetchData = async () => {
-      await fetch(`${import.meta.env.PUBLIC_API_URL}/get_index_and_key_json`, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          setMasterList(data.data);
-        })
-        .catch((err) => console.log(err));
-    };
+  const displayAcceptedFiles = (acceptedFiles: any[]) => {
+    setListAcceptedFiles(acceptedFiles);
+  };
 
-    fetchData().then(() => {
-      setIsLoaded(true);
+  const downloadJsonFiles = async () => {
+    await fetch(`${import.meta.env.PUBLIC_API_URL}/get_index_and_key_json`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setMasterList(data.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const selectNewOccasion = (
+    occasion_name: string,
+    occasion_obj_key: string
+  ) => {
+    setSelectedList((prevState) => {
+      const newState = { ...prevState };
+      newState.occasion = occasion_obj_key;
+      newState.photo = "";
+      newState.details = false;
+      return newState;
     });
+
+    setSelectedListName((prevState) => {
+      const newState = { ...prevState };
+      newState.occasion = occasion_name;
+      newState.photo = "";
+      newState.details = false;
+      return newState;
+    });
+
+    console.log("occasion selected");
   };
 
   React.useEffect(() => {
     const fetchDataAndSetLoaded = async () => {
       // Fetches concert JSON
-      await downloadJsonFiles();
-      setIsLoaded(true);
+      const fetchData = async () => {
+        await fetch(
+          `${import.meta.env.PUBLIC_API_URL}/get_index_and_key_json`,
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            setMasterList(data.data);
+          })
+          .catch((err) => console.log(err));
+      };
+
+      fetchData().then(() => {
+        setIsLoaded(true);
+      });
     };
 
     fetchDataAndSetLoaded();
   }, []);
 
   // React.useEffect(() => {
-  //   console.log(Object.keys(masterList));
+  //   console.log(masterList);
   // }, [masterList]);
 
+  //If anything is added to the list
   React.useEffect(() => {
-    console.log(occasionList);
-  }, [occasionList]);
+    if (!!selectedList.type) {
+      handlePhotoTypeSelect(photoTypeKeys.indexOf(selectedList.type));
+    }
+    if (!!selectedList.occasion && !!selectedListName.occasion) {
+      handleOccasionSelect(selectedList.occasion, selectedListName.occasion);
+    }
+    // if(!selectedList.occasion)
+  }, [masterList]);
+
+  // React.useEffect(() => {
+  //   console.log(selectedListName);
+  // }, [selectedListName]);
+
+  // React.useEffect(() => {
+  //   console.log(selectedList);
+  // }, [selectedList]);
+
+  // React.useEffect(() => {
+  //   console.log(occasionList);
+  // }, [occasionList]);
 
   //Photo type is selected and shows the respected occasions
-  const handlePhotoTypeSelect = (index: number) => {
+  const handlePhotoTypeSelect = async (index: number) => {
     if (index !== selectedList.type) {
       setSelectedList((prevState) => {
         const newState = { ...prevState };
@@ -111,7 +175,6 @@ export default function EditingParent() {
       });
 
       setOccasionList([]);
-
       setPhotosList([]);
       setDetails({});
     }
@@ -154,8 +217,6 @@ export default function EditingParent() {
         return newState;
       });
 
-      console.log(occasionList);
-
       setSelectedListName((prevState) => {
         const newState = { ...prevState };
         newState.occasion = occasion_name;
@@ -192,7 +253,7 @@ export default function EditingParent() {
     setPhotosList(photo_list);
   };
 
-  const handlePhotoSelect = (photo_obj_key: string, photo_details: any) => {
+  const handlePhotoSelect = (photo_obj_key: string, photo_details: string) => {
     if (photo_obj_key !== selectedList.photo) {
       setSelectedList((prevState) => {
         const newState = { ...prevState };
@@ -269,8 +330,6 @@ export default function EditingParent() {
       return newState;
     });
 
-    console.log(occasionList);
-
     setSelectedListName((prevState) => {
       const newState = { ...prevState };
       newState.photo = "";
@@ -294,7 +353,14 @@ export default function EditingParent() {
 
   return (
     <div className="overflow-x-auto">
-      <div className="flex h-8 flex-row overflow-x-auto">
+      {/* Navbar */}
+
+      <div className="flex h-8 w-max flex-row items-center overflow-x-auto">
+        <FontAwesomeIcon
+          onClick={downloadJsonFiles}
+          icon={faArrowsRotate}
+          className="mr-2 cursor-pointer hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+        />
         {selectedListName.type && (
           <div className="flex w-auto flex-row">
             <div
@@ -319,7 +385,6 @@ export default function EditingParent() {
           </div>
         }
       </div>
-
       <div className="mt-2 flex flex-row ">
         {/* Photo Type */}
         <div className="flex flex-col items-stretch">
@@ -379,32 +444,18 @@ export default function EditingParent() {
                 typeName={selectedListName.type}
                 occasionBool={true}
                 downloadJsonFiles={downloadJsonFiles}
+                selectNewOccasion={selectNewOccasion}
               />
             )}
         </div>
 
         {/* Photos */}
-        <div className="ml-4 flex flex-col items-stretch">
-          {photosList.map((photo, index) => {
-            var photo_name = Object.keys(photo)[0];
-            var photo_details = photo[photo_name];
-            var photo_selected = photo["selected"];
-
-            return (
-              <div
-                key={index}
-                className={`${
-                  photo_selected &&
-                  "text-sea-foam-green dark:text-dark-grayish-red"
-                } mb-1 flex cursor-pointer flex-row items-center justify-between hover:text-sea-foam-green dark:hover:text-dark-grayish-red`}
-                onClick={() => {
-                  handlePhotoSelect(photo_name, photo_details);
-                }}
-              >
-                <div className={`mr-4 text-lg`}>{photo_name}</div>
-              </div>
-            );
-          })}
+        <div className="ml-4 flex flex-col items-stretch" id="photo-list">
+          <PhotoList
+            photosList={photosList}
+            handlePhotoSelect={handlePhotoSelect}
+            displayAcceptedFiles={displayAcceptedFiles}
+          />
         </div>
 
         {/* Photo Details */}
@@ -429,6 +480,24 @@ export default function EditingParent() {
             <div>Place: {details["venue"]}</div>
           )}
         </div>
+      </div>
+
+      <div>
+        {listAcceptedFiles.map((file, index) => {
+          return (
+            <div key={file.name}>
+              <div>
+                <img
+                  src={file.preview}
+                  // Revoke data uri after image is loaded
+                  onLoad={() => {
+                    URL.revokeObjectURL(file.preview);
+                  }}
+                />
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
