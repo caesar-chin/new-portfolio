@@ -5,6 +5,7 @@ interface PhotoListProps {
   photosList: any[];
   handlePhotoSelect: (photo_name: string, photo_details: string) => void;
   displayAcceptedFiles: (files: any[]) => void;
+  
 }
 
 export default function PhotoList({
@@ -33,12 +34,7 @@ export default function PhotoList({
   // }, [files]);
 
   return (
-    <div
-      {...getRootProps()}
-      className={`relative ${
-        isDragActive && "border-4 border-dotted border-gray-600"
-      }`}
-    >
+    <div {...getRootProps()} className={`relative ${isDragActive && ""}`}>
       <input {...getInputProps()} />
 
       <div className={`${isDragActive && "invisible"}`}>
@@ -65,7 +61,7 @@ export default function PhotoList({
       </div>
 
       {isDragActive && (
-        <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center bg-black bg-opacity-50">
+        <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center bg-black bg-opacity-50 text-center">
           Drop Here To Upload Photos
         </div>
       )}
