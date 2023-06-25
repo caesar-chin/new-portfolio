@@ -1,11 +1,11 @@
 import React from "react";
-import { useDropzone } from "react-dropzone";
+import * as Dropzone from 'react-dropzone';
 
 interface PhotoListProps {
   photosList: any[];
   handlePhotoSelect: (photo_name: string, photo_details: string) => void;
   displayAcceptedFiles: (files: any[]) => void;
-  
+
 }
 
 export default function PhotoList({
@@ -15,7 +15,7 @@ export default function PhotoList({
 }: PhotoListProps) {
   // const [files, setFiles] = React.useState([]);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive } = Dropzone.useDropzone({
     noClick: true,
     accept: { "image/*": [] },
     onDropAccepted: (acceptedFiles) => {

@@ -1,7 +1,8 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes as xmark } from "@fortawesome/free-solid-svg-icons";
-import { useDropzone } from "react-dropzone";
+import * as Dropzone from 'react-dropzone';
+
 
 interface UploadModuleProps {
   handleUploadModule: (show: boolean) => void;
@@ -27,7 +28,7 @@ export default function UploadModule({
     console.log(selectedOccasionName);
   }, [selectedOccasionKey, selectedOccasionName]);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive } = Dropzone.useDropzone({
     noClick: true,
     accept: { "image/*": [] },
     onDropAccepted: (acceptedFiles) => {
