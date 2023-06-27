@@ -1,11 +1,10 @@
 import React from "react";
-import * as Dropzone from 'react-dropzone';
+import * as Dropzone from "react-dropzone";
 
 interface PhotoListProps {
   photosList: any[];
   handlePhotoSelect: (photo_name: string, photo_details: string) => void;
   displayAcceptedFiles: (files: any[]) => void;
-
 }
 
 export default function PhotoList({
@@ -59,6 +58,13 @@ export default function PhotoList({
           );
         })}
       </div>
+
+      <div
+        onClick={() => displayAcceptedFiles([])}
+        className={
+          "mb-1 mr-4 flex cursor-pointer flex-row items-center justify-between text-lg hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+        }
+      >{`+ Add New Photo`}</div>
 
       {isDragActive && (
         <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center bg-black bg-opacity-50 text-center">

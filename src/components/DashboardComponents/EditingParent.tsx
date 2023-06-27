@@ -47,8 +47,15 @@ export default function EditingParent() {
   const [photosList, setPhotosList] = React.useState([]);
   const [details, setDetails] = React.useState({});
   const [previousType, setPreviousType] = React.useState(null);
-  const [listAcceptedFiles, setListAcceptedFiles] = React.useState([]);
-  const [showUploadModule, setShowUploadModule] = React.useState(false);
+  const [listAcceptedFiles, setListAcceptedFiles] = React.useState([
+    {
+      path: "8369703101.png",
+      preview:
+        "blob:http://localhost:3000/70167ba7-85b1-4b64-a608-7d251cf85009",
+      name: "8369703101.png",
+    },
+  ]);
+  const [showUploadModule, setShowUploadModule] = React.useState(true);
 
   const photoTypeKeys = ["concert", "streetlandscape"];
 
@@ -172,9 +179,9 @@ export default function EditingParent() {
     // if(!selectedList.occasion)
   }, [masterList]);
 
-  // React.useEffect(() => {
-  //   console.log(selectedListName);
-  // }, [selectedListName]);
+  React.useEffect(() => {
+    console.log(selectedListName);
+  }, [selectedListName]);
 
   // React.useEffect(() => {
   //   console.log(selectedList);
@@ -482,11 +489,13 @@ export default function EditingParent() {
 
         {/* Photos */}
         <div className="ml-4 flex flex-col items-stretch" id="photo-list">
-          <PhotoList
-            photosList={photosList}
-            handlePhotoSelect={handlePhotoSelect}
-            displayAcceptedFiles={displayAcceptedFiles}
-          />
+          {selectedListName.occasion !== "" && (
+            <PhotoList
+              photosList={photosList}
+              handlePhotoSelect={handlePhotoSelect}
+              displayAcceptedFiles={displayAcceptedFiles}
+            />
+          )}
         </div>
 
         {/* Photo Details */}
@@ -515,8 +524,12 @@ export default function EditingParent() {
 
       {showUploadModule && (
         <div
-          onClick={() => handleUploadModule(false)}
-          className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-black dark:text-black"
+          onClick={(e) => {
+            if (e.currentTarget === e.target) {
+              handleUploadModule(false);
+            }
+          }}
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 text-black dark:text-black"
         >
           <UploadModule
             handleUploadModule={handleUploadModule}
