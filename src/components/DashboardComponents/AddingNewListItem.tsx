@@ -32,7 +32,7 @@ export default function AddingNewListItem({
     if (occasionBool) {
       await fetch(`${import.meta.env.PUBLIC_API_URL}/add_occasion`, {
         method: "PUT",
-        // credentials: "include",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },

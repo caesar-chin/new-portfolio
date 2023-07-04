@@ -47,15 +47,8 @@ export default function EditingParent() {
   const [photosList, setPhotosList] = React.useState([]);
   const [details, setDetails] = React.useState({});
   const [previousType, setPreviousType] = React.useState(null);
-  const [listAcceptedFiles, setListAcceptedFiles] = React.useState([
-    {
-      path: "8369703101.png",
-      preview:
-        "blob:http://localhost:3000/70167ba7-85b1-4b64-a608-7d251cf85009",
-      name: "8369703101.png",
-    },
-  ]);
-  const [showUploadModule, setShowUploadModule] = React.useState(true);
+  const [listAcceptedFiles, setListAcceptedFiles] = React.useState([]);
+  const [showUploadModule, setShowUploadModule] = React.useState(false);
 
   const photoTypeKeys = ["concert", "streetlandscape"];
 
@@ -179,9 +172,9 @@ export default function EditingParent() {
     // if(!selectedList.occasion)
   }, [masterList]);
 
-  React.useEffect(() => {
-    console.log(selectedListName);
-  }, [selectedListName]);
+  // React.useEffect(() => {
+  //   console.log(selectedListName);
+  // }, [selectedListName]);
 
   // React.useEffect(() => {
   //   console.log(selectedList);
@@ -536,9 +529,11 @@ export default function EditingParent() {
             listAcceptedFiles={listAcceptedFiles}
             selectedOccasionKey={selectedList.occasion}
             selectedOccasionName={selectedListName.occasion}
+            selectedOccasionType = {selectedList.type}
             addingMorePhotosToListAcceptedFiles={
               addingMorePhotosToListAcceptedFiles
             }
+            downloadJsonFiles={downloadJsonFiles}
           />
         </div>
       )}
