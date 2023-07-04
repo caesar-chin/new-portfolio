@@ -1,5 +1,5 @@
 import React from "react";
-import { useDropzone } from "react-dropzone";
+import * as Dropzone from "react-dropzone";
 
 interface PhotoListProps {
   photosList: any[];
@@ -14,7 +14,7 @@ export default function PhotoList({
 }: PhotoListProps) {
   // const [files, setFiles] = React.useState([]);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive } = Dropzone.useDropzone({
     noClick: true,
     accept: { "image/*": [] },
     onDropAccepted: (acceptedFiles) => {
@@ -33,12 +33,7 @@ export default function PhotoList({
   // }, [files]);
 
   return (
-    <div
-      {...getRootProps()}
-      className={`relative ${
-        isDragActive && "border-4 border-dotted border-gray-600"
-      }`}
-    >
+    <div {...getRootProps()} className={`relative ${isDragActive && ""}`}>
       <input {...getInputProps()} />
 
       <div className={`${isDragActive && "invisible"}`}>
@@ -64,8 +59,15 @@ export default function PhotoList({
         })}
       </div>
 
+      <div
+        onClick={() => displayAcceptedFiles([])}
+        className={
+          "mb-1 mr-4 flex cursor-pointer flex-row items-center justify-between text-lg hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+        }
+      >{`+ Add New Photo`}</div>
+
       {isDragActive && (
-        <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center bg-black bg-opacity-50">
+        <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center bg-black bg-opacity-50 text-center">
           Drop Here To Upload Photos
         </div>
       )}

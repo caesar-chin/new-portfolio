@@ -6,6 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import AddingNewListItem from "./AddingNewListItem";
 import PhotoList from "./PhotoList";
+import UploadModule from "./UploadModule";
 
 type OccasionDetails = {
   [key: string]: string;
@@ -47,6 +48,7 @@ export default function EditingParent() {
   const [details, setDetails] = React.useState({});
   const [previousType, setPreviousType] = React.useState(null);
   const [listAcceptedFiles, setListAcceptedFiles] = React.useState([]);
+  const [showUploadModule, setShowUploadModule] = React.useState(false);
 
   const photoTypeKeys = ["concert", "streetlandscape"];
 
@@ -57,6 +59,35 @@ export default function EditingParent() {
 
   const displayAcceptedFiles = (acceptedFiles: any[]) => {
     setListAcceptedFiles(acceptedFiles);
+    setShowUploadModule(true);
+  };
+
+  const handleUploadModule = (show: boolean) => {
+    setShowUploadModule(show);
+  };
+
+  const addingMorePhotosToListAcceptedFiles = (acceptedFiles: any[]) => {
+    setListAcceptedFiles((prevItems) => {
+      // Separate new items into those that are unique and those that are duplicates
+      const uniqueItems = [];
+      const duplicateItems = [];
+
+      acceptedFiles.forEach((newItem) => {
+        if (prevItems.some((prevItem) => prevItem.name === newItem.name)) {
+          duplicateItems.push(newItem);
+        } else {
+          uniqueItems.push(newItem);
+        }
+      });
+
+      // Console log the names of the duplicate items
+      duplicateItems.forEach((duplicateItem) =>
+        console.log(duplicateItem.name)
+      );
+
+      // Add the new unique items to the end of the array
+      return [...prevItems, ...uniqueItems];
+    });
   };
 
   const downloadJsonFiles = async () => {
@@ -451,11 +482,13 @@ export default function EditingParent() {
 
         {/* Photos */}
         <div className="ml-4 flex flex-col items-stretch" id="photo-list">
-          <PhotoList
-            photosList={photosList}
-            handlePhotoSelect={handlePhotoSelect}
-            displayAcceptedFiles={displayAcceptedFiles}
-          />
+          {selectedListName.occasion !== "" && (
+            <PhotoList
+              photosList={photosList}
+              handlePhotoSelect={handlePhotoSelect}
+              displayAcceptedFiles={displayAcceptedFiles}
+            />
+          )}
         </div>
 
         {/* Photo Details */}
@@ -482,23 +515,28 @@ export default function EditingParent() {
         </div>
       </div>
 
-      <div>
-        {listAcceptedFiles.map((file, index) => {
-          return (
-            <div key={file.name}>
-              <div>
-                <img
-                  src={file.preview}
-                  // Revoke data uri after image is loaded
-                  onLoad={() => {
-                    URL.revokeObjectURL(file.preview);
-                  }}
-                />
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      {showUploadModule && (
+        <div
+          onClick={(e) => {
+            if (e.currentTarget === e.target) {
+              handleUploadModule(false);
+            }
+          }}
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 text-black dark:text-black"
+        >
+          <UploadModule
+            handleUploadModule={handleUploadModule}
+            listAcceptedFiles={listAcceptedFiles}
+            selectedOccasionKey={selectedList.occasion}
+            selectedOccasionName={selectedListName.occasion}
+            selectedOccasionType = {selectedList.type}
+            addingMorePhotosToListAcceptedFiles={
+              addingMorePhotosToListAcceptedFiles
+            }
+            downloadJsonFiles={downloadJsonFiles}
+          />
+        </div>
+      )}
     </div>
   );
 }
