@@ -8,14 +8,6 @@ import AddingNewListItem from "./AddingNewListItem";
 import PhotoList from "./PhotoList";
 import UploadModule from "./UploadModule";
 
-type OccasionDetails = {
-  [key: string]: string;
-};
-
-type OccasionType = OccasionDetails & {
-  selected: boolean;
-};
-
 type SelectedListType = {
   type: any;
   occasion: string;
@@ -43,11 +35,18 @@ export default function EditingParent() {
     { name: "Concert", selected: false },
     { name: "Street & Landscape", selected: false },
   ]);
-  const [occasionList, setOccasionList] = React.useState<OccasionType[]>([]);
+  const [occasionList, setOccasionList] = React.useState([]);
   const [photosList, setPhotosList] = React.useState([]);
   const [details, setDetails] = React.useState({});
   const [previousType, setPreviousType] = React.useState(null);
-  const [listAcceptedFiles, setListAcceptedFiles] = React.useState([]);
+  const [listAcceptedFiles, setListAcceptedFiles] = React.useState([
+    // {
+    //   path: "8369703101.png",
+    //   preview:
+    //     "blob:http://localhost:3000/70167ba7-85b1-4b64-a608-7d251cf85009",
+    //   name: "8369703101.png",
+    // },
+  ]);
   const [showUploadModule, setShowUploadModule] = React.useState(false);
 
   const photoTypeKeys = ["concert", "streetlandscape"];
@@ -60,6 +59,12 @@ export default function EditingParent() {
   const displayAcceptedFiles = (acceptedFiles: any[]) => {
     setListAcceptedFiles(acceptedFiles);
     setShowUploadModule(true);
+  };
+
+  const removePhotoFromListAcceptedFiles = (index: number) => {
+    setListAcceptedFiles((prevArray) =>
+      prevArray.filter((item, i) => i !== index)
+    );
   };
 
   const handleUploadModule = (show: boolean) => {
@@ -91,6 +96,21 @@ export default function EditingParent() {
   };
 
   const downloadJsonFiles = async () => {
+    await fetch(`${import.meta.env.PUBLIC_API_URL}/get_index_and_key_json`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setMasterList(data.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleRefresh = async () => {
     await fetch(`${import.meta.env.PUBLIC_API_URL}/get_index_and_key_json`, {
       method: "GET",
       headers: {
@@ -157,32 +177,85 @@ export default function EditingParent() {
     fetchDataAndSetLoaded();
   }, []);
 
-  // React.useEffect(() => {
-  //   console.log(masterList);
-  // }, [masterList]);
-
   //If anything is added to the list
   React.useEffect(() => {
-    if (!!selectedList.type) {
-      handlePhotoTypeSelect(photoTypeKeys.indexOf(selectedList.type));
+    if (
+      !!selectedList.type &&
+      !!selectedList.occasion &&
+      !!selectedListName.occasion
+    ) {
+      handleUpdateToDOM(
+        photoTypeKeys.indexOf(selectedList.type),
+        selectedList.occasion,
+        selectedListName.occasion
+      );
     }
-    if (!!selectedList.occasion && !!selectedListName.occasion) {
-      handleOccasionSelect(selectedList.occasion, selectedListName.occasion);
-    }
-    // if(!selectedList.occasion)
   }, [masterList]);
 
-  // React.useEffect(() => {
-  //   console.log(selectedListName);
-  // }, [selectedListName]);
+  const handleUpdateToDOM = (
+    index: number,
+    occasion_obj_key: string,
+    occasion_name: string
+  ) => {
+    setSelectedList((prevState) => {
+      const newState = { ...prevState };
+      newState.type = photoTypeKeys[index];
+      newState.occasion = occasion_obj_key;
+      newState.photo = "";
+      newState.details = false;
+      return newState;
+    });
 
-  // React.useEffect(() => {
-  //   console.log(selectedList);
-  // }, [selectedList]);
+    setSelectedListName((prevState) => {
+      const newState = { ...prevState };
+      newState.type = photoType[index].name;
+      newState.occasion = occasion_name;
+      newState.photo = "";
+      newState.details = false;
+      return newState;
+    });
 
-  // React.useEffect(() => {
-  //   console.log(occasionList);
-  // }, [occasionList]);
+    setDetails({});
+
+    setPhotoType((prevState) => {
+      const newState = [...prevState]; // create a new copy of the array
+      for (let typeName of newState) {
+        if (typeName.name === newState[index].name) {
+          typeName.selected = true; // change the selected property of the item at the specified index
+        } else {
+          typeName.selected = false;
+        }
+      }
+      return newState; // return the new array
+    });
+
+    let index_list = [];
+
+    for (let concertOccasion in masterList[photoTypeKeys[index]]["index"]) {
+      index_list.push({
+        [concertOccasion]:
+          masterList[photoTypeKeys[index]]["index"][concertOccasion],
+        selected: false || concertOccasion === occasion_obj_key,
+      });
+    }
+
+    setOccasionList(index_list);
+
+    let photo_list = [];
+
+    for (let concertPhoto of masterList[selectedList.type]["keys"][
+      occasion_obj_key
+    ]) {
+      concertPhoto["selected"] = false;
+      photo_list.push(concertPhoto);
+    }
+
+    setPhotosList(photo_list);
+  };
+
+  React.useEffect(() => {
+    console.log(masterList);
+  }, [masterList]);
 
   //Photo type is selected and shows the respected occasions
   const handlePhotoTypeSelect = async (index: number) => {
@@ -372,14 +445,6 @@ export default function EditingParent() {
     setDetails({});
   };
 
-  // React.useEffect(() => {
-  //   console.log(occasionList);
-  // }, [occasionList]);
-
-  // React.useEffect(() => {
-  //   console.log(selectedList);
-  // }, [selectedList]);
-
   if (!isLoaded) return <div className="mt-4">Loading...</div>;
 
   return (
@@ -388,7 +453,7 @@ export default function EditingParent() {
 
       <div className="flex h-8 w-max flex-row items-center overflow-x-auto">
         <FontAwesomeIcon
-          onClick={downloadJsonFiles}
+          onClick={handleRefresh}
           icon={faArrowsRotate}
           className="mr-2 cursor-pointer hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
         />
@@ -472,7 +537,7 @@ export default function EditingParent() {
           {occasionList.length > 0 &&
             selectedListName.type === previousType && (
               <AddingNewListItem
-                typeName={selectedListName.type}
+                typeName={selectedList.type}
                 occasionBool={true}
                 downloadJsonFiles={downloadJsonFiles}
                 selectNewOccasion={selectNewOccasion}
@@ -529,11 +594,12 @@ export default function EditingParent() {
             listAcceptedFiles={listAcceptedFiles}
             selectedOccasionKey={selectedList.occasion}
             selectedOccasionName={selectedListName.occasion}
-            selectedOccasionType = {selectedList.type}
+            selectedOccasionType={selectedList.type}
             addingMorePhotosToListAcceptedFiles={
               addingMorePhotosToListAcceptedFiles
             }
             downloadJsonFiles={downloadJsonFiles}
+            removePhotoFromListAcceptedFiles={removePhotoFromListAcceptedFiles}
           />
         </div>
       )}

@@ -11,6 +11,7 @@ interface UploadModuleProps {
   selectedOccasionType: string;
   addingMorePhotosToListAcceptedFiles: (files: any[]) => void;
   downloadJsonFiles?: () => void;
+  removePhotoFromListAcceptedFiles: (index: number) => void;
 }
 
 type FileData = {
@@ -33,6 +34,7 @@ export default function UploadModule({
   selectedOccasionType,
   addingMorePhotosToListAcceptedFiles,
   downloadJsonFiles,
+  removePhotoFromListAcceptedFiles,
 }: UploadModuleProps) {
   // Add new state variables for the "Apply to all" input values
   const [artist, setArtist] = React.useState("");
@@ -58,6 +60,8 @@ export default function UploadModule({
     }))
   );
 
+  const [uploading, setUploading] = React.useState(false);
+
   const handleInputChange = (
     fileName: string,
     field: string,
@@ -81,6 +85,7 @@ export default function UploadModule({
 
   // sends the photos in inputData
   const handleUpload = async () => {
+    setUploading(true);
     const formData = new FormData();
 
     listAcceptedFiles.forEach((file, index) => {
@@ -148,6 +153,10 @@ export default function UploadModule({
     console.log(selectedOccasionName);
     console.log(selectedOccasionType);
   }, [selectedOccasionKey, selectedOccasionName]);
+
+  const handleRemovePhoto = (index: number) => {
+    setInputData((prevArray) => prevArray.filter((item, i) => i !== index));
+  };
 
   const { getRootProps, getInputProps, isDragActive, open } =
     Dropzone.useDropzone({
@@ -308,109 +317,132 @@ export default function UploadModule({
           </div>
 
           {inputData.map((file: { [x: string]: any }, index: any) => {
+            console.log(file)
             const file_object = file[Object.keys(file)[0]];
             const file_name = Object.keys(file)[0];
             return (
               <div
                 key={file_name}
-                className={`flex flex-row items-center py-8 ${
+                className={`flex flex-col py-8 ${
                   inputData.length > 1 &&
-                  "border-b-2  border-sea-foam-green border-opacity-50  dark:border-dark-grayish-red dark:border-opacity-50"
+                  "border-b-2  border-sea-foam-green border-opacity-50 dark:border-dark-grayish-red dark:border-opacity-50"
                 }`}
               >
-                <div>
+                <div className="flex flex-row justify-between ">
                   <div className="mb-4 text-xl">{file_name}</div>
-                  <div className="border-2 border-sea-foam-green border-opacity-50 dark:border-dark-grayish-red">
-                    <img
-                      src={file_object["preview"]}
-                      // Revoke data uri after image is loaded
-                      onLoad={() => {
-                        URL.revokeObjectURL(file_object["preview"]);
-                      }}
-                      className="w-80 object-scale-down"
-                    />
+                  <div
+                    className="mb-4 cursor-pointer text-xl hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+                    onClick={() => {
+                      removePhotoFromListAcceptedFiles(index);
+                      handleRemovePhoto(index);
+                    }}
+                  >
+                    Remove
                   </div>
                 </div>
 
-                <div className="ml-2">
-                  <div className="mb-2 flex flex-col items-center justify-between sm:flex-row">
-                    <label className="text-md mx-4 block w-full sm:w-auto">
-                      Artist:
-                    </label>
-                    <input
-                      type="text"
-                      id={`Artist-${index}`}
-                      disabled={artistCheck}
-                      value={file_object["artist"]}
-                      onChange={(e) => {
-                        handleInputChange(file_name, "artist", e.target.value);
-                      }}
-                      className={`${
-                        artistCheck
-                          ? "cursor-not-allowed bg-gray-300 opacity-50"
-                          : "bg-gray-50"
-                      } border block w-auto rounded-lg border-gray-300 p-2.5 text-sm text-gray-900 focus:border-sea-foam-green focus:ring-sea-foam-green dark:focus:border-dark-grayish-red dark:focus:ring-dark-grayish-red`}
-                    />
+                <div className={`flex flex-row items-center`}>
+                  <div>
+                    <div className="border-2 border-sea-foam-green border-opacity-50 dark:border-dark-grayish-red">
+                      <img
+                        src={file_object["preview"]}
+                        // Revoke data uri after image is loaded
+                        onLoad={() => {
+                          URL.revokeObjectURL(file_object["preview"]);
+                        }}
+                        className="w-80 object-scale-down"
+                      />
+                    </div>
                   </div>
 
-                  <div className="mb-2 flex flex-col items-center justify-between sm:flex-row">
-                    <label className="text-md mx-4 block w-full sm:w-auto">
-                      Venue:
-                    </label>
-                    <input
-                      type="text"
-                      id={`Venue-${index}`}
-                      disabled={venueCheck}
-                      value={file_object["venue"]}
-                      onChange={(e) => {
-                        handleInputChange(file_name, "venue", e.target.value);
-                      }}
-                      className={`${
-                        venueCheck
-                          ? "cursor-not-allowed bg-gray-300 opacity-50"
-                          : "bg-gray-50"
-                      } border block w-auto rounded-lg border-gray-300 p-2.5 text-sm text-gray-900 focus:border-sea-foam-green focus:ring-sea-foam-green dark:focus:border-dark-grayish-red dark:focus:ring-dark-grayish-red `}
-                    />
-                  </div>
+                  <div className="ml-2">
+                    <div className="mb-2 flex flex-col items-center justify-between sm:flex-row">
+                      <label className="text-md mx-4 block w-full sm:w-auto">
+                        Artist:
+                      </label>
+                      <input
+                        type="text"
+                        id={`Artist-${index}`}
+                        disabled={artistCheck}
+                        value={file_object["artist"]}
+                        onChange={(e) => {
+                          handleInputChange(
+                            file_name,
+                            "artist",
+                            e.target.value
+                          );
+                        }}
+                        className={`${
+                          artistCheck
+                            ? "cursor-not-allowed bg-gray-300 opacity-50"
+                            : "bg-gray-50"
+                        } border block w-auto rounded-lg border-gray-300 p-2.5 text-sm text-gray-900 focus:border-sea-foam-green focus:ring-sea-foam-green dark:focus:border-dark-grayish-red dark:focus:ring-dark-grayish-red`}
+                      />
+                    </div>
 
-                  <div className="mb-2 flex flex-col items-center justify-between sm:flex-row">
-                    <label className="text-md mx-4 block w-full sm:w-auto">
-                      Caption:
-                    </label>
-                    <input
-                      type="text"
-                      id={`Caption-${index}`}
-                      disabled={captionCheck}
-                      value={file_object["caption"]}
-                      onChange={(e) => {
-                        handleInputChange(file_name, "caption", e.target.value);
-                      }}
-                      className={`${
-                        captionCheck
-                          ? "cursor-not-allowed bg-gray-300 opacity-50"
-                          : "bg-gray-50"
-                      } border block w-auto rounded-lg border-gray-300 p-2.5 text-sm text-gray-900 focus:border-sea-foam-green focus:ring-sea-foam-green dark:focus:border-dark-grayish-red dark:focus:ring-dark-grayish-red `}
-                    />
-                  </div>
+                    <div className="mb-2 flex flex-col items-center justify-between sm:flex-row">
+                      <label className="text-md mx-4 block w-full sm:w-auto">
+                        Venue:
+                      </label>
+                      <input
+                        type="text"
+                        id={`Venue-${index}`}
+                        disabled={venueCheck}
+                        value={file_object["venue"]}
+                        onChange={(e) => {
+                          handleInputChange(file_name, "venue", e.target.value);
+                        }}
+                        className={`${
+                          venueCheck
+                            ? "cursor-not-allowed bg-gray-300 opacity-50"
+                            : "bg-gray-50"
+                        } border block w-auto rounded-lg border-gray-300 p-2.5 text-sm text-gray-900 focus:border-sea-foam-green focus:ring-sea-foam-green dark:focus:border-dark-grayish-red dark:focus:ring-dark-grayish-red `}
+                      />
+                    </div>
 
-                  <div className="mb-2 flex flex-col items-center justify-between sm:flex-row">
-                    <label className="text-md mx-4 block w-full sm:w-auto">
-                      Date:
-                    </label>
-                    <input
-                      type="text"
-                      id={`Date-${index}`}
-                      disabled={dateCheck}
-                      value={file_object["date"]}
-                      onChange={(e) => {
-                        handleInputChange(file_name, "date", e.target.value);
-                      }}
-                      className={`${
-                        dateCheck
-                          ? "cursor-not-allowed bg-gray-300 opacity-50"
-                          : "bg-gray-50"
-                      } border block w-auto rounded-lg border-gray-300 p-2.5 text-sm text-gray-900 focus:border-sea-foam-green focus:ring-sea-foam-green dark:focus:border-dark-grayish-red dark:focus:ring-dark-grayish-red `}
-                    />
+                    <div className="mb-2 flex flex-col items-center justify-between sm:flex-row">
+                      <label className="text-md mx-4 block w-full sm:w-auto">
+                        Caption:
+                      </label>
+                      <input
+                        type="text"
+                        id={`Caption-${index}`}
+                        disabled={captionCheck}
+                        value={file_object["caption"]}
+                        onChange={(e) => {
+                          handleInputChange(
+                            file_name,
+                            "caption",
+                            e.target.value
+                          );
+                        }}
+                        className={`${
+                          captionCheck
+                            ? "cursor-not-allowed bg-gray-300 opacity-50"
+                            : "bg-gray-50"
+                        } border block w-auto rounded-lg border-gray-300 p-2.5 text-sm text-gray-900 focus:border-sea-foam-green focus:ring-sea-foam-green dark:focus:border-dark-grayish-red dark:focus:ring-dark-grayish-red `}
+                      />
+                    </div>
+
+                    <div className="mb-2 flex flex-col items-center justify-between sm:flex-row">
+                      <label className="text-md mx-4 block w-full sm:w-auto">
+                        Date:
+                      </label>
+                      <input
+                        type="text"
+                        id={`Date-${index}`}
+                        disabled={dateCheck}
+                        value={file_object["date"]}
+                        onChange={(e) => {
+                          handleInputChange(file_name, "date", e.target.value);
+                        }}
+                        className={`${
+                          dateCheck
+                            ? "cursor-not-allowed bg-gray-300 opacity-50"
+                            : "bg-gray-50"
+                        } border block w-auto rounded-lg border-gray-300 p-2.5 text-sm text-gray-900 focus:border-sea-foam-green focus:ring-sea-foam-green dark:focus:border-dark-grayish-red dark:focus:ring-dark-grayish-red `}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -418,25 +450,36 @@ export default function UploadModule({
           })}
 
           {listAcceptedFiles.length !== 0 && (
-            <div className="mt-4">
-              <button
-                disabled={listAcceptedFiles.length === 0}
-                className={`${
-                  listAcceptedFiles.length === 0
-                    ? "mr-2 text-xl text-gray-500 opacity-50 hover:opacity-75"
-                    : "mr-2 cursor-pointer  text-xl hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
-                }`}
-                onClick={() => {
-                  handleUpload();
-                }}
-              >
-                Upload
-              </button>
+            <div className="mt-4 flex flex-row gap-4">
+              {!uploading ? (
+                <button
+                  disabled={listAcceptedFiles.length === 0}
+                  className={`${
+                    listAcceptedFiles.length === 0
+                      ? "text-xl text-gray-500 opacity-50 hover:opacity-75"
+                      : "cursor-pointer text-xl hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+                  }`}
+                  onClick={() => {
+                    handleUpload();
+                  }}
+                >
+                  Upload
+                </button>
+              ) : (
+                <div className="flex items-center space-x-1 text-xl">
+                  <span>Uploading</span>
+                  <span className="animate-fastPulse">.</span>
+                  <span className="animate-fastPulse">.</span>
+                  <span className="animate-fastPulse">.</span>
+                </div>
+              )}
 
               <button
                 onClick={(e) => {
-                  e.stopPropagation();
-                  handleUploadModule(false);
+                  if (!uploading) {
+                    e.stopPropagation();
+                    handleUploadModule(false);
+                  }
                 }}
                 className="text-xl hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
               >
