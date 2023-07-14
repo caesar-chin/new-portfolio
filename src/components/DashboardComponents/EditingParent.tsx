@@ -1,12 +1,17 @@
-import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faGreaterThan,
   faArrowsRotate,
+  faCheck,
+  faGreaterThan,
+  faTrash,
+  faX,
 } from "@fortawesome/free-solid-svg-icons";
-import AddingNewListItem from "./AddingNewListItem";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
+import OccasionList from "./OccasionList";
 import PhotoList from "./PhotoList";
 import UploadModule from "./UploadModule";
+import PhotoTypeList from "./PhotoTypeList";
+import PhotoDetails from "./PhotoDetails";
 
 type SelectedListType = {
   type: any;
@@ -48,6 +53,13 @@ export default function EditingParent() {
     // },
   ]);
   const [showUploadModule, setShowUploadModule] = React.useState(false);
+
+  const [showDelete, setShowDelete] = React.useState(true);
+
+  const [deleteObject, setDeleteObject] = React.useState({
+    occasion: [],
+    photos: [],
+  });
 
   const photoTypeKeys = ["concert", "streetlandscape"];
 
@@ -93,6 +105,10 @@ export default function EditingParent() {
       // Add the new unique items to the end of the array
       return [...prevItems, ...uniqueItems];
     });
+  };
+
+  const handleShowDelete = (show: boolean) => {
+    setShowDelete(show);
   };
 
   const downloadJsonFiles = async () => {
@@ -236,6 +252,7 @@ export default function EditingParent() {
         [concertOccasion]:
           masterList[photoTypeKeys[index]]["index"][concertOccasion],
         selected: false || concertOccasion === occasion_obj_key,
+        deleted_selected: false,
       });
     }
 
@@ -253,13 +270,17 @@ export default function EditingParent() {
     setPhotosList(photo_list);
   };
 
-  React.useEffect(() => {
-    console.log(masterList);
-  }, [masterList]);
+  // React.useEffect(() => {
+  //   console.log(occasionList);
+  // }, [occasionList]);
 
   //Photo type is selected and shows the respected occasions
   const handlePhotoTypeSelect = async (index: number) => {
-    if (index !== selectedList.type) {
+    if (photoTypeKeys[index] !== selectedList.type) {
+      setDeleteObject({
+        occasion: [],
+        photos: [],
+      });
       setSelectedList((prevState) => {
         const newState = { ...prevState };
         newState.type = photoTypeKeys[index];
@@ -278,34 +299,33 @@ export default function EditingParent() {
         return newState;
       });
 
-      setOccasionList([]);
+      setPhotoType((prevState) => {
+        const newState = [...prevState]; // create a new copy of the array
+        for (let typeName of newState) {
+          if (typeName.name === newState[index].name) {
+            typeName.selected = true; // change the selected property of the item at the specified index
+          } else {
+            typeName.selected = false;
+          }
+        }
+        return newState; // return the new array
+      });
+
+      let index_list = [];
+
+      for (let concertOccasion in masterList[photoTypeKeys[index]]["index"]) {
+        index_list.push({
+          [concertOccasion]:
+            masterList[photoTypeKeys[index]]["index"][concertOccasion],
+          selected: false,
+          deleted_selected: false,
+        });
+      }
+
+      setOccasionList(index_list);
       setPhotosList([]);
       setDetails({});
     }
-
-    setPhotoType((prevState) => {
-      const newState = [...prevState]; // create a new copy of the array
-      for (let typeName of newState) {
-        if (typeName.name === newState[index].name) {
-          typeName.selected = true; // change the selected property of the item at the specified index
-        } else {
-          typeName.selected = false;
-        }
-      }
-      return newState; // return the new array
-    });
-
-    let index_list = [];
-
-    for (let concertOccasion in masterList[photoTypeKeys[index]]["index"]) {
-      index_list.push({
-        [concertOccasion]:
-          masterList[photoTypeKeys[index]]["index"][concertOccasion],
-        selected: false,
-      });
-    }
-
-    setOccasionList(index_list);
   };
 
   const handleOccasionSelect = (
@@ -445,12 +465,50 @@ export default function EditingParent() {
     setDetails({});
   };
 
+  const addOccasionDeleteObject = (index: number, new_object: any) => {
+    setOccasionList((prevState) => {
+      const newState = [...prevState];
+      newState[index]["deleted_selected"] = true;
+      return newState;
+    });
+    // console.log(new_object);
+    setDeleteObject((prevState) => ({
+      ...prevState,
+      occasion: [...prevState.occasion, new_object],
+    }));
+  };
+
+  const removeOccasionDeleteObject = (index: number, objectToRemove: any) => {
+    setDeleteObject((prevState) => ({
+      ...prevState,
+      occasion: prevState.occasion.filter((obj) => {
+        // Get the key of the current object
+        const key = Object.keys(obj)[0];
+
+        // Get the value of the current object
+        const value = obj[key];
+
+        // Get the key and value of the objectToRemove
+        const keyToRemove = Object.keys(objectToRemove)[0];
+        const valueToRemove = objectToRemove[keyToRemove];
+
+        // Only keep the objects whose key and value don't match those of objectToRemove
+        return !(key == keyToRemove && value == valueToRemove);
+      }),
+    }));
+
+    setOccasionList((prevState) => {
+      const newState = [...prevState];
+      newState[index]["deleted_selected"] = false;
+      return newState;
+    });
+  };
+
   if (!isLoaded) return <div className="mt-4">Loading...</div>;
 
   return (
     <div className="overflow-x-auto">
       {/* Navbar */}
-
       <div className="flex h-8 w-max flex-row items-center overflow-x-auto">
         <FontAwesomeIcon
           onClick={handleRefresh}
@@ -481,102 +539,71 @@ export default function EditingParent() {
           </div>
         }
       </div>
+
+      {/* Handle Delete */}
+      <div className="mt-2 flex h-8 flex-row items-center gap-4">
+        <FontAwesomeIcon
+          icon={faTrash}
+          className="cursor-pointer hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+          onClick={() => setShowDelete(!showDelete)}
+        />
+        {showDelete && (
+          <div className="flex flex-row items-center gap-2">
+            <FontAwesomeIcon
+              icon={faCheck}
+              className="cursor-pointer text-xl hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+            />
+            <FontAwesomeIcon
+              icon={faX}
+              className="cursor-pointer hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+              onClick={() => setShowDelete(false)}
+            />
+          </div>
+        )}
+      </div>
+
       <div className="mt-2 flex flex-row ">
         {/* Photo Type */}
         <div className="flex flex-col items-stretch">
-          {photoType.map((type, index) => {
-            return (
-              <div
-                key={index}
-                className={`${
-                  type.selected &&
-                  "text-sea-foam-green dark:text-dark-grayish-red"
-                } mb-1 flex cursor-pointer flex-row items-center justify-between hover:text-sea-foam-green dark:hover:text-dark-grayish-red`}
-                onClick={() => handlePhotoTypeSelect(index)}
-              >
-                <div className={`mr-4 text-lg`}>{type.name}</div>
-                <div className="w-4">
-                  <FontAwesomeIcon
-                    icon={faGreaterThan}
-                    className={`${!type.selected && "hidden"} text-sm`}
-                  />
-                </div>
-              </div>
-            );
-          })}
+          <PhotoTypeList
+            photoType={photoType}
+            handlePhotoTypeSelect={handlePhotoTypeSelect}
+          />
         </div>
 
         {/* Occasions */}
         <div className="ml-4 flex flex-col items-stretch">
-          {occasionList.map((occasion, index) => {
-            var occasion_obj_key = Object.keys(occasion)[0];
-            var occasion_name = occasion[occasion_obj_key];
-            var occasion_selected = occasion[Object.keys(occasion)[1]];
-            return (
-              <div
-                key={index}
-                className={`${
-                  occasion_selected &&
-                  "text-sea-foam-green dark:text-dark-grayish-red"
-                } mb-1 flex cursor-pointer flex-row items-center justify-between hover:text-sea-foam-green dark:hover:text-dark-grayish-red`}
-                onClick={() => {
-                  handleOccasionSelect(occasion_obj_key, occasion_name);
-                }}
-              >
-                <div className={`mr-4 text-lg`}>{occasion_name}</div>
-
-                <div className="w-4">
-                  <FontAwesomeIcon
-                    icon={faGreaterThan}
-                    className={`${!occasion_selected && "hidden"} text-sm`}
-                  />
-                </div>
-              </div>
-            );
-          })}
-          {occasionList.length > 0 &&
-            selectedListName.type === previousType && (
-              <AddingNewListItem
-                typeName={selectedList.type}
-                occasionBool={true}
-                downloadJsonFiles={downloadJsonFiles}
-                selectNewOccasion={selectNewOccasion}
-              />
-            )}
+          <OccasionList
+            occasionList={occasionList}
+            showDelete={showDelete}
+            addOccasionDeleteObject={addOccasionDeleteObject}
+            selectedList={selectedList}
+            removeOccasionDeleteObject={removeOccasionDeleteObject}
+            handleOccasionSelect={handleOccasionSelect}
+            downloadJsonFiles={downloadJsonFiles}
+            selectNewOccasion={selectNewOccasion}
+            selectedListName={selectedListName}
+            previousType={previousType}
+          />
         </div>
 
         {/* Photos */}
         <div className="ml-4 flex flex-col items-stretch" id="photo-list">
           {selectedListName.occasion !== "" && (
             <PhotoList
+              showDelete={showDelete}
               photosList={photosList}
               handlePhotoSelect={handlePhotoSelect}
               displayAcceptedFiles={displayAcceptedFiles}
+              listOfSelectAllOccasion={deleteObject.occasion}
+              deleteObject={deleteObject}
             />
           )}
         </div>
 
         {/* Photo Details */}
         <div className={`${!selectedList.details && "hidden"} ml-4`}>
-          <div className="w-80">
-            <img
-              src={details["webp_url"]}
-              alt={details["caption"]}
-              className="h-full w-full"
-            />
-          </div>
-
-          <div>Caption: {details["caption"]}</div>
-          <div>Date: {details["date"]}</div>
-          {/* <div>{details["url"]}</div> */}
-          {selectedList.type === "concert" ? (
-            <div>
-              <div>Artist: {details["artist"]}</div>
-              <div>Venue: {details["venue"]}</div>
-            </div>
-          ) : (
-            <div>Place: {details["venue"]}</div>
-          )}
+          <PhotoDetails details={details} selectedList={selectedList} />
         </div>
       </div>
 

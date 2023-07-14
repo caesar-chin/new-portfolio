@@ -127,7 +127,7 @@ export default function UploadModule({
     })
       .then((res) => res.json())
       .then((res) => {
-        if (res.success === 200) {
+        if (res.success) {
           downloadJsonFiles();
           handleUploadModule(false);
         }
@@ -317,7 +317,7 @@ export default function UploadModule({
           </div>
 
           {inputData.map((file: { [x: string]: any }, index: any) => {
-            console.log(file)
+            console.log(file);
             const file_object = file[Object.keys(file)[0]];
             const file_name = Object.keys(file)[0];
             return (
