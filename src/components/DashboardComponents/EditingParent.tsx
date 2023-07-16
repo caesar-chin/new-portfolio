@@ -1,17 +1,16 @@
 import {
   faArrowsRotate,
   faCheck,
-  faGreaterThan,
   faTrash,
   faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import OccasionList from "./OccasionList";
-import PhotoList from "./PhotoList";
-import UploadModule from "./UploadModule";
-import PhotoTypeList from "./PhotoTypeList";
 import PhotoDetails from "./PhotoDetails";
+import PhotoList from "./PhotoList";
+import PhotoTypeList from "./PhotoTypeList";
+import UploadModule from "./UploadModule";
 
 type SelectedListType = {
   type: any;
@@ -64,6 +63,14 @@ export default function EditingParent() {
   const photoTypeKeys = ["concert", "streetlandscape"];
 
   React.useEffect(() => {
+    console.log(deleteObject);
+  }, [deleteObject]);
+
+  React.useEffect(() => {
+    console.log(photosList);
+  }, [photosList]);
+
+  React.useEffect(() => {
     // Update the previousType state whenever selectedListName.type changes
     setPreviousType(selectedListName.type);
   }, [selectedListName.type]);
@@ -105,10 +112,6 @@ export default function EditingParent() {
       // Add the new unique items to the end of the array
       return [...prevItems, ...uniqueItems];
     });
-  };
-
-  const handleShowDelete = (show: boolean) => {
-    setShowDelete(show);
   };
 
   const downloadJsonFiles = async () => {
@@ -504,6 +507,183 @@ export default function EditingParent() {
     });
   };
 
+  const addPhotoDeleteObject = (type_occasion: string, photo_name: string) => {
+    setDeleteObject((prevState) => {
+      const { occasion, photos } = prevState;
+
+      const existingPhotoIndex = photos.findIndex(
+        (photo) => Object.keys(photo)[0] === type_occasion
+      );
+
+      let newPhotos;
+
+      if (existingPhotoIndex !== -1) {
+        newPhotos = [...photos];
+        newPhotos[existingPhotoIndex][type_occasion] = [
+          ...newPhotos[existingPhotoIndex][type_occasion],
+          photo_name,
+        ];
+      } else {
+        newPhotos = [...photos, { [type_occasion]: [photo_name] }];
+      }
+
+      return {
+        occasion,
+        photos: newPhotos,
+      };
+    });
+  };
+
+  const deletePhotoDeleteObject = (
+    type_occasion: string,
+    photo_name: string
+  ) => {
+    setDeleteObject((prevState) => {
+      const newState = { ...prevState };
+      const photosArray = newState.photos;
+
+      // Find the index of the object that has the type_occasion key
+      const index = photosArray.findIndex((photoObj) =>
+        photoObj.hasOwnProperty(type_occasion)
+      );
+
+      // If such an object exists
+      if (index !== -1) {
+        // Get the array of photo names for this type_occasion
+        const photoNames = photosArray[index][type_occasion];
+
+        // Find the index of the photo_name in this array
+        const photoIndex = photoNames.indexOf(photo_name);
+
+        // If photo_name is found
+        if (photoIndex !== -1) {
+          // Remove photo_name from the array
+          photoNames.splice(photoIndex, 1);
+
+          // If the array becomes empty
+          if (photoNames.length === 0) {
+            // Remove the object from the photosArray
+            photosArray.splice(index, 1);
+          }
+        }
+      }
+
+      return newState;
+    });
+  };
+
+  const handleDeleteOccasions = async () => {
+    var occasion_list = deleteObject.occasion.map(
+      (obj) => Object.values(obj)[0]
+    );
+
+    await fetch(`${import.meta.env.PUBLIC_API_URL}/delete_occasions`, {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ occasion: occasion_list }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (!data["success"]) {
+          console.log("There has been an error: ");
+          console.log(data["error"]);
+        } else if (data["success"]) {
+          console.log(data);
+          setDeleteObject((prevState) => ({
+            ...prevState,
+            occasion: [],
+          }));
+          return true;
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleDeletePhotos = async () => {
+    await fetch(`${import.meta.env.PUBLIC_API_URL}/delete_files`, {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ keys: deleteObject.photos }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (!data["success"]) {
+          console.log("There has been an error: ");
+          console.log(data["error"]);
+        } else if (data["success"]) {
+          console.log(data);
+          setDeleteObject((prevState) => ({
+            ...prevState,
+            photos: [],
+          }));
+          return true;
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleDeleteButton = async () => {
+    if (deleteObject.occasion.length > 0) {
+      await handleDeleteOccasions();
+    }
+
+    if (deleteObject.photos.length > 0) {
+      await handleDeletePhotos();
+    }
+
+    await fetch(`${import.meta.env.PUBLIC_API_URL}/get_index_and_key_json`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setMasterList(data.data);
+        let master_list = data.data;
+        setSelectedList((prevState) => {
+          const newState = { ...prevState };
+          newState.occasion = "";
+          newState.photo = "";
+          newState.details = false;
+          return newState;
+        });
+
+        setSelectedListName((prevState) => {
+          const newState = { ...prevState };
+          newState.occasion = "";
+          newState.photo = "";
+          newState.details = false;
+          return newState;
+        });
+
+        setDetails({});
+
+        let index_list = [];
+
+        for (let concertOccasion in master_list[selectedList["type"]][
+          "index"
+        ]) {
+          index_list.push({
+            [concertOccasion]:
+              master_list[selectedList["type"]]["index"][concertOccasion],
+            selected: false,
+            deleted_selected: false,
+          });
+        }
+
+        setOccasionList(index_list);
+      })
+      .catch((err) => console.log(err));
+  };
+
   if (!isLoaded) return <div className="mt-4">Loading...</div>;
 
   return (
@@ -551,7 +731,13 @@ export default function EditingParent() {
           <div className="flex flex-row items-center gap-2">
             <FontAwesomeIcon
               icon={faCheck}
-              className="cursor-pointer text-xl hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+              className={`${
+                deleteObject.occasion.length !== 0 ||
+                deleteObject.photos.length !== 0
+                  ? "cursor-pointer hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+                  : "text-gray-500"
+              } text-xl  `}
+              onClick={handleDeleteButton}
             />
             <FontAwesomeIcon
               icon={faX}
@@ -597,6 +783,8 @@ export default function EditingParent() {
               displayAcceptedFiles={displayAcceptedFiles}
               listOfSelectAllOccasion={deleteObject.occasion}
               deleteObject={deleteObject}
+              addPhotoDeleteObject={addPhotoDeleteObject}
+              deletePhotoDeleteObject={deletePhotoDeleteObject}
             />
           )}
         </div>

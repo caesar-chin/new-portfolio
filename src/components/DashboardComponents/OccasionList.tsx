@@ -28,7 +28,6 @@ export default function OccasionList({
   selectedListName,
   previousType,
 }: OccasionListProps) {
-
   return (
     <div>
       {occasionList.map((occasion, index) => {
@@ -48,7 +47,7 @@ export default function OccasionList({
                         selectedList.type + "/" + occasion_name,
                     });
                   } else if (!event.target.checked) {
-                    removeOccasionDeleteObject(index,{
+                    removeOccasionDeleteObject(index, {
                       [occasion_obj_key]:
                         selectedList.type + "/" + occasion_name,
                     });
