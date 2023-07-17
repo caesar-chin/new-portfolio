@@ -1,4 +1,4 @@
-import { faGreaterThan } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faGreaterThan, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import AddingNewListItem from "./AddingNewListItem";
@@ -14,6 +14,8 @@ interface OccasionListProps {
   selectNewOccasion: any;
   selectedListName: any;
   previousType: any;
+  showEdit: boolean;
+  
 }
 
 export default function OccasionList({
@@ -27,6 +29,7 @@ export default function OccasionList({
   selectNewOccasion,
   selectedListName,
   previousType,
+  showEdit,
 }: OccasionListProps) {
   return (
     <div>
@@ -57,21 +60,42 @@ export default function OccasionList({
               />
             )}
 
-            <div
-              className={`${
-                occasion_selected &&
-                "text-sea-foam-green dark:text-dark-grayish-red"
-              } mb-1 flex cursor-pointer flex-row items-center justify-between hover:text-sea-foam-green dark:hover:text-dark-grayish-red`}
-              onClick={() => {
-                handleOccasionSelect(occasion_obj_key, occasion_name);
-              }}
-            >
-              <div className={`mr-4 text-lg`}>{occasion_name}</div>
+            <div className={`mb-1 flex flex-row items-center justify-between`}>
+              {!showEdit ? (
+                <div
+                  onClick={() => {
+                    handleOccasionSelect(occasion_obj_key, occasion_name);
+                  }}
+                  className={`${
+                    occasion_selected &&
+                    "text-sea-foam-green dark:text-dark-grayish-red"
+                  } mr-4 cursor-pointer text-lg hover:text-sea-foam-green dark:hover:text-dark-grayish-red`}
+                >
+                  {occasion_name}
+                </div>
+              ) : (
+                <div className="flex flex-row gap-2 items-center">
+                  <input
+                    className="border mb-1 border-gray-500 bg-transparent text-lg"
+                    type="text"
+                    value={occasion_name}
+                  />
+
+                  <FontAwesomeIcon
+                    icon={faCheck}
+                    className="mr-4 text-md cursor-pointer hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+                  />
+
+                </div>
+              )}
 
               <div className="w-4">
                 <FontAwesomeIcon
                   icon={faGreaterThan}
-                  className={`${!occasion_selected && "hidden"} text-sm`}
+                  className={`${!occasion_selected && "hidden"} ${
+                    occasion_selected &&
+                    "text-sea-foam-green dark:text-dark-grayish-red"
+                  } text-sm hover:text-sea-foam-green dark:hover:text-dark-grayish-red`}
                 />
               </div>
             </div>

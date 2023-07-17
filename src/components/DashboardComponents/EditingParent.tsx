@@ -3,6 +3,7 @@ import {
   faCheck,
   faTrash,
   faX,
+  faPenSquare,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
@@ -53,7 +54,8 @@ export default function EditingParent() {
   ]);
   const [showUploadModule, setShowUploadModule] = React.useState(false);
 
-  const [showDelete, setShowDelete] = React.useState(true);
+  const [showDelete, setShowDelete] = React.useState(false);
+  const [showEdit, setShowEdit] = React.useState(false);
 
   const [deleteObject, setDeleteObject] = React.useState({
     occasion: [],
@@ -117,6 +119,7 @@ export default function EditingParent() {
   const downloadJsonFiles = async () => {
     await fetch(`${import.meta.env.PUBLIC_API_URL}/get_index_and_key_json`, {
       method: "GET",
+      credentials: "include",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -132,6 +135,7 @@ export default function EditingParent() {
   const handleRefresh = async () => {
     await fetch(`${import.meta.env.PUBLIC_API_URL}/get_index_and_key_json`, {
       method: "GET",
+      credentials: "include",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -175,6 +179,7 @@ export default function EditingParent() {
           `${import.meta.env.PUBLIC_API_URL}/get_index_and_key_json`,
           {
             method: "GET",
+            credentials: "include",
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
@@ -579,6 +584,7 @@ export default function EditingParent() {
 
     await fetch(`${import.meta.env.PUBLIC_API_URL}/delete_occasions`, {
       method: "DELETE",
+      credentials: "include",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -605,6 +611,7 @@ export default function EditingParent() {
   const handleDeletePhotos = async () => {
     await fetch(`${import.meta.env.PUBLIC_API_URL}/delete_files`, {
       method: "DELETE",
+      credentials: "include",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -639,6 +646,7 @@ export default function EditingParent() {
 
     await fetch(`${import.meta.env.PUBLIC_API_URL}/get_index_and_key_json`, {
       method: "GET",
+      credentials: "include",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -720,32 +728,44 @@ export default function EditingParent() {
         }
       </div>
 
-      {/* Handle Delete */}
-      <div className="mt-2 flex h-8 flex-row items-center gap-4">
-        <FontAwesomeIcon
-          icon={faTrash}
-          className="cursor-pointer hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
-          onClick={() => setShowDelete(!showDelete)}
-        />
-        {showDelete && (
-          <div className="flex flex-row items-center gap-2">
-            <FontAwesomeIcon
-              icon={faCheck}
-              className={`${
-                deleteObject.occasion.length !== 0 ||
-                deleteObject.photos.length !== 0
-                  ? "cursor-pointer hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
-                  : "text-gray-500"
-              } text-xl  `}
-              onClick={handleDeleteButton}
-            />
-            <FontAwesomeIcon
-              icon={faX}
-              className="cursor-pointer hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
-              onClick={() => setShowDelete(false)}
-            />
-          </div>
-        )}
+      {/* Handle Delete And Edit */}
+      <div className="flex flex-row">
+        <div className="mt-2 flex w-24 flex-row items-center gap-4">
+          <FontAwesomeIcon
+            icon={faTrash}
+            className="cursor-pointer hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+            onClick={() => setShowDelete(!showDelete)}
+          />
+          {showDelete && (
+            <div className="flex flex-row items-center gap-2">
+              <FontAwesomeIcon
+                icon={faCheck}
+                className={`${
+                  deleteObject.occasion.length !== 0 ||
+                  deleteObject.photos.length !== 0
+                    ? "cursor-pointer hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+                    : "text-gray-500"
+                } text-xl`}
+                onClick={handleDeleteButton}
+              />
+              <FontAwesomeIcon
+                icon={faX}
+                className="cursor-pointer hover:text-sea-foam-green dark:hover:text-dark-grayish-red"
+                onClick={() => setShowDelete(false)}
+              />
+            </div>
+          )}
+        </div>
+
+        <div className="mt-2 flex h-8 flex-row items-center gap-4">
+          <FontAwesomeIcon
+            icon={faPenSquare}
+            className={`${
+              showEdit && "text-sea-foam-green dark:text-dark-grayish-red"
+            } cursor-pointer text-lg hover:text-sea-foam-green dark:hover:text-dark-grayish-red`}
+            onClick={() => setShowEdit(!showEdit)}
+          />
+        </div>
       </div>
 
       <div className="mt-2 flex flex-row ">
@@ -770,6 +790,7 @@ export default function EditingParent() {
             selectNewOccasion={selectNewOccasion}
             selectedListName={selectedListName}
             previousType={previousType}
+            showEdit={showEdit}
           />
         </div>
 
@@ -791,7 +812,7 @@ export default function EditingParent() {
 
         {/* Photo Details */}
         <div className={`${!selectedList.details && "hidden"} ml-4`}>
-          <PhotoDetails details={details} selectedList={selectedList} />
+          <PhotoDetails details={details} selectedList={selectedList} showEdit={showEdit}/>
         </div>
       </div>
 
