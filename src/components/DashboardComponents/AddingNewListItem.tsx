@@ -42,14 +42,14 @@ export default function AddingNewListItem({
         }),
       })
         .then((res) => res.json())
-        .then((res) => {
+        .then(async (res) => {
           if (res.status >= 400) {
             console.log("Error adding new occasion");
           } else {
             console.log(res);
-            selectNewOccasion(res.occasion_name, res.occasion_key);
             console.log("Successfully added new occasion");
-            downloadJsonFiles();
+            await downloadJsonFiles();
+            selectNewOccasion(res.occasion_name, res.occasion_key);
             handleAdding(false);
           }
         });
