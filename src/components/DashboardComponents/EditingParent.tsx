@@ -12,6 +12,7 @@ import PhotoDetails from "./PhotoDetails";
 import PhotoList from "./PhotoList";
 import PhotoTypeList from "./PhotoTypeList";
 import UploadModule from "./UploadModule";
+import "../../styles/tailwind-animations.css";
 
 type SelectedListType = {
   type: any;
@@ -62,15 +63,17 @@ export default function EditingParent() {
     photos: [],
   });
 
+  const [saveSuccess, setSaveSuccess] = React.useState(false);
+
   const photoTypeKeys = ["concert", "streetlandscape"];
 
-  React.useEffect(() => {
-    console.log(deleteObject);
-  }, [deleteObject]);
+  // React.useEffect(() => {
+  //   console.log(deleteObject);
+  // }, [deleteObject]);
 
-  React.useEffect(() => {
-    console.log(photosList);
-  }, [photosList]);
+  // React.useEffect(() => {
+  //   console.log(occasionList);
+  // }, [occasionList]);
 
   React.useEffect(() => {
     // Update the previousType state whenever selectedListName.type changes
@@ -206,7 +209,8 @@ export default function EditingParent() {
     if (
       !!selectedList.type &&
       !!selectedList.occasion &&
-      !!selectedListName.occasion
+      !!selectedListName.occasion &&
+      !selectedList.photo
     ) {
       handleUpdateToDOM(
         photoTypeKeys.indexOf(selectedList.type),
@@ -578,10 +582,8 @@ export default function EditingParent() {
   };
 
   const handleDeleteOccasions = async () => {
-    var occasion_list = deleteObject.occasion.map(
-      (obj) => Object.values(obj)[0]
-    );
-
+    var occasion_list = deleteObject.occasion.map((obj) => Object.values(obj)[0]);
+    console.log(deleteObject.occasion.map((obj) => Object.values(obj)[0]))
     await fetch(`${import.meta.env.PUBLIC_API_URL}/delete_occasions`, {
       method: "DELETE",
       credentials: "include",
@@ -692,6 +694,204 @@ export default function EditingParent() {
       .catch((err) => console.log(err));
   };
 
+  const handleOccasionInputChange = async (
+    old_name: string,
+    new_name_object: any
+  ) => {
+    var fetch_body = {
+      path: `${selectedList.type}/${old_name}`,
+      new_path: `${selectedList.type}/${Object.keys(new_name_object)[0]}`,
+      new_occasion_name: new_name_object[Object.keys(new_name_object)[0]],
+    };
+
+    await fetch(`${import.meta.env.PUBLIC_API_URL}/edit_occasion_name`, {
+      method: "PUT",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(fetch_body),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (!data["success"]) {
+          console.log("There has been an error: ");
+          console.log(data["error"]);
+        } else if (data["success"]) {
+          console.log(data);
+          fetch(`${import.meta.env.PUBLIC_API_URL}/get_index_and_key_json`, {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              setMasterList(data.data);
+              let master_list = data.data;
+              setSelectedList((prevState) => {
+                const newState = { ...prevState };
+                newState.occasion = "";
+                newState.photo = "";
+                newState.details = false;
+                return newState;
+              });
+
+              setSelectedListName((prevState) => {
+                const newState = { ...prevState };
+                newState.occasion = "";
+                newState.photo = "";
+                newState.details = false;
+                return newState;
+              });
+
+              setDetails({});
+
+              let index_list = [];
+
+              for (let concertOccasion in master_list[selectedList["type"]][
+                "index"
+              ]) {
+                index_list.push({
+                  [concertOccasion]:
+                    master_list[selectedList["type"]]["index"][concertOccasion],
+                  selected: false,
+                  deleted_selected: false,
+                });
+              }
+
+              setOccasionList(index_list);
+
+              setSaveSuccess(true);
+              setTimeout(() => {
+                setSaveSuccess(false);
+              }, 7500);
+            })
+            .catch((err) => console.log(err));
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleDetailInputChange = async (
+    artist: string,
+    caption: string,
+    date: string,
+    venue: string
+  ) => {
+    var fetch_body = {
+      path: {
+        [`${selectedList.type}/${selectedList.occasion}/${selectedList.photo}`]:
+          { artist: artist, caption: caption, date: date, venue: venue },
+      },
+    };
+
+    await fetch(`${import.meta.env.PUBLIC_API_URL}/edit_details`, {
+      method: "PUT",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(fetch_body),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (!data["success"]) {
+          console.log("There has been an error: ");
+          console.log(data["error"]);
+        } else if (data["success"]) {
+          console.log(data);
+          fetch(`${import.meta.env.PUBLIC_API_URL}/get_index_and_key_json`, {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              setMasterList(data.data);
+              let master_list = data.data;
+              // setSelectedList((prevState) => {
+              //   const newState = { ...prevState };
+              //   newState.occasion = "";
+              //   newState.photo = "";
+              //   newState.details = false;
+              //   return newState;
+              // });
+
+              // setSelectedListName((prevState) => {
+              //   const newState = { ...prevState };
+              //   newState.occasion = "";
+              //   newState.photo = "";
+              //   newState.details = false;
+              //   return newState;
+              // });
+
+              let index_list = [];
+
+              for (let concertOccasion in master_list[selectedList["type"]][
+                "index"
+              ]) {
+                index_list.push({
+                  [concertOccasion]:
+                    master_list[selectedList["type"]]["index"][concertOccasion],
+                  selected: false || selectedList.occasion === concertOccasion,
+                  deleted_selected: false,
+                });
+              }
+
+              setOccasionList(index_list);
+
+              setPhotosList((prevState) => {
+                const newState = [...prevState]; // create a new copy of the array
+                for (let occasionName of newState) {
+                  if (selectedList.photo === Object.keys(occasionName)[0]) {
+                    occasionName["selected"] = true;
+                  } else {
+                    occasionName["selected"] = false;
+                  }
+                }
+                return newState;
+              });
+
+              const keysArray =
+                master_list[selectedList["type"]]["keys"][
+                  selectedList["occasion"]
+                ];
+              const detailObject = keysArray.find(
+                (obj: any) => selectedList["photo"] in obj
+              )[selectedList["photo"]];
+
+              setDetails({
+                caption: detailObject["caption"],
+                date: detailObject["date"],
+                url: detailObject["url"],
+                webp_url: detailObject["webp_url"],
+                artist: detailObject["artist"],
+                venue: detailObject["venue"],
+              });
+
+              setSaveSuccess(true);
+              setTimeout(() => {
+                setSaveSuccess(false);
+              }, 7500);
+            })
+            .catch((err) => console.log(err));
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  React.useEffect(() => {
+    console.log(selectedList);
+  }, [selectedList]);
+
   if (!isLoaded) return <div className="mt-4">Loading...</div>;
 
   return (
@@ -727,7 +927,6 @@ export default function EditingParent() {
           </div>
         }
       </div>
-
       {/* Handle Delete And Edit */}
       <div className="flex flex-row">
         <div className="mt-2 flex w-24 flex-row items-center gap-4">
@@ -767,7 +966,6 @@ export default function EditingParent() {
           />
         </div>
       </div>
-
       <div className="mt-2 flex flex-row ">
         {/* Photo Type */}
         <div className="flex flex-col items-stretch">
@@ -791,6 +989,7 @@ export default function EditingParent() {
             selectedListName={selectedListName}
             previousType={previousType}
             showEdit={showEdit}
+            handleOccasionInputChange={handleOccasionInputChange}
           />
         </div>
 
@@ -812,10 +1011,15 @@ export default function EditingParent() {
 
         {/* Photo Details */}
         <div className={`${!selectedList.details && "hidden"} ml-4`}>
-          <PhotoDetails details={details} selectedList={selectedList} showEdit={showEdit}/>
+          <PhotoDetails
+            details={details}
+            selectedList={selectedList}
+            showEdit={showEdit}
+            setShowEdit={setShowEdit}
+            handleDetailInputChange={handleDetailInputChange}
+          />
         </div>
       </div>
-
       {showUploadModule && (
         <div
           onClick={(e) => {
@@ -837,6 +1041,14 @@ export default function EditingParent() {
             downloadJsonFiles={downloadJsonFiles}
             removePhotoFromListAcceptedFiles={removePhotoFromListAcceptedFiles}
           />
+        </div>
+      )}
+
+      {!saveSuccess && <div></div>}
+
+      {saveSuccess && (
+        <div className={`animate-fade-out fixed bottom-0 left-0 m-4 text-2xl`}>
+          SUCCESSFULLY SAVED
         </div>
       )}
     </div>
