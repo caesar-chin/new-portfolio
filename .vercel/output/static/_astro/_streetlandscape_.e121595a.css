@@ -1,0 +1,1 @@
+#projects:where(.astro-DKZ4TGNV),#contact:where(.astro-DKZ4TGNV),#home:where(.astro-DKZ4TGNV),#footer:where(.astro-DKZ4TGNV){animation:fadeInAnimation ease 1s;animation-iteration-count:1;animation-fill-mode:forwards}@keyframes fadeInAnimation{0%{opacity:0}to{opacity:1}}

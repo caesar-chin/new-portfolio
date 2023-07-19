@@ -1,0 +1,54 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import PhotoNavbar from "../../../components/PhotographyComponents/PhotoNavbar";
+import SingleGallery from "../../../components/PhotographyComponents/SingleGallery";
+import Gallery from "../../../components/PhotographyComponents/Gallery";
+
+let darkMode = localStorage.getItem("color-theme") === "dark" ? true : false;
+
+const { concert } = Astro.params;
+---
+
+<div
+  class="bg-white text-black dark:bg-darkish-cyan dark:text-white"
+  id="background"
+>
+  <Layout title="Caesar Chin Concert Photography">
+    <div class="container mx-auto">
+      <div class="mx-12 flex min-h-screen flex-col items-center pt-2">
+        <div id="home" class="min-h-screen w-full">
+          <PhotoNavbar darkMode={darkMode} title="concert" client:load />
+          <div class="m-h-full">
+            <SingleGallery
+              occasion_key={concert}
+              darkMode={darkMode}
+              title="concert"
+              client:load
+            />
+            <!-- <Gallery darkMode={darkMode} title="concert" client:load /> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </Layout>
+</div>
+
+<style>
+  #projects,
+  #contact,
+  #home,
+  #footer {
+    animation: fadeInAnimation ease 1s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes fadeInAnimation {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+</style>

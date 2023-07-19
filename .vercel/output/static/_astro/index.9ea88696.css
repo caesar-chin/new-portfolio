@@ -1,0 +1,1 @@
+#projects:where(.astro-W77VLDXV),#contact:where(.astro-W77VLDXV),#home:where(.astro-W77VLDXV),#footer:where(.astro-W77VLDXV){animation:fadeInAnimation ease 1s;animation-iteration-count:1;animation-fill-mode:forwards}@keyframes fadeInAnimation{0%{opacity:0}to{opacity:1}}
