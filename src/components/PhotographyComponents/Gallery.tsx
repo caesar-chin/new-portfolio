@@ -41,6 +41,7 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
   // }, [loadedImages]);
 
   const BASE_URL = "https://caesar-chin-photography.s3.amazonaws.com";
+
   useEffect(() => {
     fetch(`${BASE_URL}/${title}/index.json`, {
       method: "GET",
@@ -344,17 +345,23 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
               <div key={index} className={`${loading ? "hidden" : "block"}`}>
                 <div className="mt-8 flex w-auto flex-row items-center justify-between">
                   <div className="ml-4 flex w-auto flex-row items-center whitespace-pre">
-                    <div className="flex flex-row max-md:flex-col ">
-                      <div className="text-lg uppercase">
-                        {occasion_name_parts[0]}
+                    <a
+                      href={`/photography/${title}/${
+                        Object.keys(occasion_key)[0]
+                      }`}
+                    >
+                      <div className="flex cursor-pointer flex-row hover:!text-sea-foam-green dark:hover:!text-dark-grayish-red max-md:flex-col">
+                        <div className="text-lg uppercase">
+                          {occasion_name_parts[0]}
+                        </div>
+                        <div className="text-lg uppercase max-md:hidden">
+                          {", "}
+                        </div>
+                        <div className="text-lg uppercase">
+                          {occasion_name_parts[1]}
+                        </div>
                       </div>
-                      <div className="text-lg uppercase max-md:hidden">
-                        {", "}
-                      </div>
-                      <div className="text-lg uppercase">
-                        {occasion_name_parts[1]}
-                      </div>
-                    </div>
+                    </a>
                   </div>
 
                   <div className="ml-4 flex w-full flex-row items-center border-white before:mr-4 before:flex-auto before:border-half before:content-[''] ">
