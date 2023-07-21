@@ -1,1 +1,0 @@
-#projects:where(.astro-QW7WTDYF),#contact:where(.astro-QW7WTDYF),#home:where(.astro-QW7WTDYF),#footer:where(.astro-QW7WTDYF){animation:fadeInAnimation ease 1s;animation-iteration-count:1;animation-fill-mode:forwards}@keyframes fadeInAnimation{0%{opacity:0}to{opacity:1}}
