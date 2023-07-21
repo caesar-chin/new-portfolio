@@ -157,7 +157,7 @@ export default function SingleGallery({
         </div>
       )} */}
 
-          <div className="mb-12 flex justify-center whitespace-pre text-4xl uppercase">
+          <div className="mb-12 flex justify-center whitespace-normal text-4xl uppercase text-center">
             {Object.values(occasionObject)}
           </div>
 
