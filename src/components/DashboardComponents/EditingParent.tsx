@@ -379,9 +379,9 @@ export default function EditingParent() {
 
     let photo_list = [];
 
-    for (let concertPhoto of masterList[selectedList.type]["keys"][
-      occasion_obj_key
-    ]) {
+    for (let concertPhoto of [].concat(
+      masterList[selectedList.type]?.["keys"]?.[occasion_obj_key] || []
+    )) {
       concertPhoto["selected"] = false;
       photo_list.push(concertPhoto);
     }
@@ -582,8 +582,10 @@ export default function EditingParent() {
   };
 
   const handleDeleteOccasions = async () => {
-    var occasion_list = deleteObject.occasion.map((obj) => Object.values(obj)[0]);
-    console.log(deleteObject.occasion.map((obj) => Object.values(obj)[0]))
+    var occasion_list = deleteObject.occasion.map(
+      (obj) => Object.values(obj)[0]
+    );
+    console.log(deleteObject.occasion.map((obj) => Object.values(obj)[0]));
     await fetch(`${import.meta.env.PUBLIC_API_URL}/delete_occasions`, {
       method: "DELETE",
       credentials: "include",

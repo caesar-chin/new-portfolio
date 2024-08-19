@@ -45,7 +45,10 @@ export default function OccasionList({
     let newState = [...editValues];
 
     // Replace spaces with underscores in the new value
-    let sanitizedValue = new_string.replace(/ /g, "_");
+    let sanitizedValue = new_string
+      .toLowerCase()
+      .replace(/[ ,]+/g, "_")
+      .replace(/_{2,}/g, "_");
 
     // Construct a new object with the sanitized value as key and value,
     // and the rest of the properties from the original object
