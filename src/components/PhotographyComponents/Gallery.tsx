@@ -52,6 +52,7 @@ export default function Gallery({ darkMode, title }: GalleryProps) {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log(data)
         setOccasionList(data);
         let count = 0;
         for (let occasion_name in data) {

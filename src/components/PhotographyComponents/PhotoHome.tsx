@@ -5,6 +5,7 @@ import concert from "../../assets/L1020944.webp";
 import streetlandscape from "../../assets/L1020155.webp";
 
 export default function PhotoHome() {
+
   return (
     <div>
       {/* <div className="text-5xl font-semibold max-sm:text-4xl text-center flex justify-center mb-8 tracking-widest">
