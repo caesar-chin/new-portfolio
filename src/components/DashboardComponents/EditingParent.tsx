@@ -80,6 +80,10 @@ export default function EditingParent() {
     setPreviousType(selectedListName.type);
   }, [selectedListName.type]);
 
+  React.useEffect(() => {
+    console.log(masterList)
+  },[masterList])
+
   const displayAcceptedFiles = (acceptedFiles: any[]) => {
     setListAcceptedFiles(acceptedFiles);
     setShowUploadModule(true);
